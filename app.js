@@ -14,7 +14,13 @@ var User = require('./models/User');
 
 app.get('/', function(req, res) {
   res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify({users: User.all()}));
+  resUsers = {};
+  User.find({}, function(err, users) {
+    users.forEach(function(user) {
+      resUsers[user._id] = user;
+    });
+  });
+  res.send(JSON.stringify(resUsers));
 });
 
 var server = http.createServer(app);
