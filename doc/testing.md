@@ -1,4 +1,4 @@
-# Testing a NodeJS/ExpressJS REST API
+# Test Driven Development (TDD) of a NodeJS/ExpressJS REST API and Backbone App
 
 In this tutorial we will lay out the steps to test a RESTful web service built
 with [Node](http://nodejs.com), [Express](http://expressjs.com), and
@@ -151,7 +151,7 @@ afterEach(function (done) {
 
 ```
 
-### Write our tests for users
+## Write our tests for users
 
 Install Chai and Supertest
 `npm install chai supertest --save-dev`
@@ -160,22 +160,19 @@ Install Chai and Supertest
 // tests/user_json_api_test.js
 
 'use strict';
-// jshint unused:false
+//jshint unused:false
 
-// include the modules needed
 var superagent = require('superagent');
 var chai = require('chai'),
   expect = chai.expect,
   should = chai.should();
-
-// include our express app  
 var app = require('../app').app;
 
 describe('Users JSON api', function(){
   var id;
 
   it('can create a new user', function(done){
-    superagent.post('http://localhost:3000/users')
+    superagent.post('http://localhost:3000/api/v1/users')
       .send({first_name: 'Ford', last_name: 'Prefect'})
       .end(function(e, res){
         expect(e).to.eql(null);
@@ -189,7 +186,7 @@ describe('Users JSON api', function(){
   });
 
   it('can get users collection', function(done){
-    superagent.get('http://localhost:3000/users').end(function(e, res){
+    superagent.get('http://localhost:3000/api/v1/users').end(function(e, res){
       expect(e).to.eql(null);
       expect(res.body.length).to.be.above(0);
 
@@ -198,7 +195,7 @@ describe('Users JSON api', function(){
   });
 
   it('can get a single user', function(done){
-    superagent.get('http://localhost:3000/users/' + id).end(function(e, res){
+    superagent.get('http://localhost:3000/api/v1/users/' + id).end(function(e, res){
       expect(e).to.eql(null);
       expect(res.body._id).to.be.eql(id);
       expect(res.body.first_name).to.be.eql('Ford');
@@ -209,7 +206,7 @@ describe('Users JSON api', function(){
   });
 
   it('can update a user', function(done){
-    superagent.put('http://localhost:3000/users/' + id).send({first_name: 'Arthur', last_name: 'Dent'})
+    superagent.put('http://localhost:3000/api/v1/users/' + id).send({first_name: 'Arthur', last_name: 'Dent'})
     .end(function(e,res){
       expect(e).to.eql(null);
       expect(res.body.msg).to.be.eql('success');
@@ -219,7 +216,7 @@ describe('Users JSON api', function(){
   });
 
   it('can delete a user' , function(done){
-    superagent.del('http://localhost:3000/users/' + id).end(function(e,res){
+    superagent.del('http://localhost:3000/api/v1/users/' + id).end(function(e,res){
       expect(e).to.eql(null);
       expect(res.body.msg).to.be.eql('success');
 
@@ -230,7 +227,7 @@ describe('Users JSON api', function(){
 
 ```
 
-### Write our first acceptance test
+## Write our first acceptance test
 
 To write our acceptance test we'll need to make sure to start the server.
 
@@ -334,10 +331,12 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
   grunt.registerTask('server', [ 'jshint', 'express:dev','watch:express' ]);
+  grunt.registerTask('test:acceptance',['express:dev','casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 
 };
 
 ```
 
-I've re-organied the tasks a bit above.
+I've re-organied the tasks a bit above, and added a `test:acceptance` task that
+sets up the express server in dev mode, and then runs the casper tests.
