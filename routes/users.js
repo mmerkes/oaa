@@ -22,11 +22,11 @@ exports.findById = function(req, res) {
 
 exports.newUser = function(req, res) {
   var user = new User(req.body);
-  user.save(function(err) {
+  user.save(function(err, user) {
     if(err){
       res.send({'error': err});
     } else {
-      res.send({'success': 'user was created with id' + user.id})
+      res.send(user);
     }
   });
 };
@@ -34,11 +34,11 @@ exports.newUser = function(req, res) {
 exports.updateUser = function(req, res) {
   var id = req.params.id;
   var user = req.body;
-  User.update({'_id': String(id)}, user, function(err){
+  User.update({'_id': String(id)}, user, function(err, resuser){
     if(err) {
       res.send({'error': err});
     } else {
-      res.send({'success': 'user with id: ' + id + ' updated'});
+      res.send({msg: 'success'});
     }
   });
 };
@@ -47,11 +47,9 @@ exports.deleteUser = function(req, res) {
   var id = String(req.params.id)
   User.remove({'_id': id}, function(err, userres){
     if(err){
-      console.log(err);
       res.send({'error': err});
     } else {
-      console.log(userres);
-      res.send({'success': 'user with id: ' + id + ' removed'});
+      res.send({'msg': 'success'});
     }
   });
 };
