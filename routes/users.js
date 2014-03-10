@@ -1,15 +1,15 @@
+'use strict';
 var User = require('../models/User');
 
 exports.collection = function(req, res) {
-  res.setHeader("Content-Type", "application/json");
-  resUsers = {};
+  res.setHeader('Content-Type', 'application/json');
   User.find({}, function(err, users) {
     res.send(JSON.stringify(users));
   });
 };
 
 exports.findById = function(req, res) {
-  res.setHeader("Content-Type", "application/json");
+  res.setHeader('Content-Type', 'application/json');
   var id = req.params.id;
   User.findOne({'_id': String(id)}, function(err, user) {
     if(err) {
@@ -44,7 +44,7 @@ exports.updateUser = function(req, res) {
 };
 
 exports.deleteUser = function(req, res) {
-  var id = String(req.params.id)
+  var id = String(req.params.id);
   User.remove({'_id': id}, function(err, userres){
     if(err){
       res.send({'error': err});

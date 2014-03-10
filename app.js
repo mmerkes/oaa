@@ -8,22 +8,25 @@ var path = require('path');
 var app = express();
 
 app.configure(function() {
-  app.use(express.errorHandler());
   app.use(express.bodyParser());
   app.use(app.router);
 });
 
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+
 var users = require('./routes/users');
 
-app.get('/users', users.collection);
+app.get('/api/v1/users', users.collection);
 
-app.get('/users/:id', users.findById);
+app.get('/api/v1/users/:id', users.findById);
 
-app.post('/users', users.newUser);
+app.post('/api/v1/users', users.newUser);
 
-app.put('/users/:id', users.updateUser);
+app.put('/api/v1/users/:id', users.updateUser);
 
-app.delete('/users/:id', users.deleteUser);
+app.delete('/api/v1/users/:id', users.deleteUser);
 
 var server = http.createServer(app);
 
