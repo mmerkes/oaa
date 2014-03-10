@@ -1,3 +1,6 @@
+'use strict';
+//jshint unused:false
+
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -25,4 +28,4 @@ app.delete('/users/:id', users.deleteUser);
 var server = http.createServer(app);
 
 server.listen(3000);
-console.log("Running on port 3000");
+console.log('Running on port 3000');
