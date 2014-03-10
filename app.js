@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var http = require('http');
 var path = require('path');
 
@@ -21,6 +20,10 @@ app.get('/', function(req, res) {
     });
   });
   res.send(JSON.stringify(resUsers));
+});
+
+app.get('/user/:id', function(req, res) {
+  res.setHeader('Content-Type', "application/json");
 });
 
 var server = http.createServer(app);
