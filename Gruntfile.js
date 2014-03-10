@@ -8,7 +8,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     simplemocha:{
       dev:{
-        src:'test/test.js',
+        src:['test/**/*_test.js'],
         options:{
           reporter: 'spec',
           slow: 200,
