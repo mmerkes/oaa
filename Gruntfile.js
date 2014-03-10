@@ -78,6 +78,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
   grunt.registerTask('server', [ 'jshint', 'express:dev','watch:express' ]);
+  grunt.registerTask('test:acceptance',['express:dev','casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 
 };
