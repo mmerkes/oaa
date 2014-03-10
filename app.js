@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var http = require('http');
 var path = require('path');
 
@@ -14,7 +13,17 @@ var User = require('./models/User');
 
 app.get('/', function(req, res) {
   res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify({users: User.all()}));
+  resUsers = {};
+  User.find({}, function(err, users) {
+    users.forEach(function(user) {
+      resUsers[user._id] = user;
+    });
+  });
+  res.send(JSON.stringify(resUsers));
+});
+
+app.get('/user/:id', function(req, res) {
+  res.setHeader('Content-Type', "application/json");
 });
 
 var server = http.createServer(app);
