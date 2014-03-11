@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     },
 
     copy: {
-      all: {
+      prod: {
         expand: true,
         cwd: 'assets',
         src: ['css/*.css', '*.html', 'images/**/*' ],
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
     casper: {
       acceptance : {
         options : {
-          test : true,
+          test : true
         },
         files : {
           'test/acceptance/casper-results.xml' : ['test/acceptance/*_test.js']
