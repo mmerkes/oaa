@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-casper');
+  grunt.loadNpmTasks('grunt-sass');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -123,6 +124,18 @@ module.exports = function(grunt) {
           console: true,
           module: true
         }
+      }
+    },
+    sass: {
+      dist: {
+        files: [{'styles.css': 'styles.scss'}]
+      },
+      dev: {
+        options: {
+          includePaths: ['public/scss/'],
+          sourceComments: 'map'
+        },
+        files: [{'styles.css': 'styles.scss'}]
       }
     }
   });
