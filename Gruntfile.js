@@ -3,11 +3,46 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-casper');
 
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    clean: {
+      build: ['build'],
+      dev: {
+        src: ['build/app.js', 'build/<%= pkg.name %>.css', 'build/<%= pkg.name %>.js']
+      },
+      prod: ['dist']
+    },
+
+    copy: {
+      all: {
+        expand: true,
+        cwd: 'public',
+        src: ['/css/*.css', '*.html', '/images/**/*' ],
+        dest: 'dist/',
+        flatten: true,
+        filter: 'isFile'
+      },
+    },
+
+    browserify: {
+      all: {
+        src: ['public/js/*.js'],
+        dest: 'dist/app.js'
+      },
+      options: {
+        transform: ['debowerify'],
+        debug: true
+      }
+    },
+
     express: {
       options: {
         // Override defaults here
@@ -76,6 +111,7 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.registerTask('build:dev', ['clean:dev', 'browserify:app', 'browserify:test', 'jshint:dev', 'less:transpile', 'concat', 'copy:dev']);
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
   grunt.registerTask('server', [ 'jshint', 'express:dev','watch:express' ]);
   grunt.registerTask('test:acceptance',['express:dev','casper']);

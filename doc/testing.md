@@ -340,3 +340,58 @@ module.exports = function(grunt) {
 
 I've re-organied the tasks a bit above, and added a `test:acceptance` task that
 sets up the express server in dev mode, and then runs the casper tests.
+
+### Set up Bower
+`bower init`
+defaults are ok
+
+### Install Front-End Stuff
+`bower install backbone jquery underscore`
+
+If you do `tree app -L 2` you'll see where bower installed the front-end resources.
+
+So, how do these front-end resources get into our app?
+
+Enter Browserify
+(link to keynote)
+
+Install yet more grunt helpers
+`npm install --save-dev grunt-contrib-copy grunt-contrib-clean grunt-browserify`
+
+- copy - copies images, plain .css, and .html files
+- clean - deletes a folder (like our dist folder)
+- browserify - integrates grunt and browserify so we don't have to run browserify
+  from the command line
+
+`npm install debowerify --save`
+
+Start modifying your `Gruntfile.js` to include options for browserify
+
+```javascript
+ pkg: grunt.file.readJSON('package.json'),
+
+    clean: ['dist'],
+
+    copy: {
+      all: {
+        expand: true,
+        cwd: 'src/',
+        src: ['*.css', '*.html', '/images/**/*', '!Gruntfile.js'],
+        dest: 'dist/',
+        flatten: true,
+        filter: 'isFile'
+      },
+    },
+
+    browserify: {
+      all: {
+        src: 'src/*.js',
+        dest: 'dist/app.js'
+      },
+      options: {
+        transform: ['debowerify'],
+        debug: true
+      }
+    },
+
+```
