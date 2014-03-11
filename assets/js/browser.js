@@ -7,16 +7,19 @@ var _          = require('underscore');
 var Backbone   = require('backbone');
 Backbone.$      = $;
 
-module.exports = Backbone.View.extend({
+var AppView = Backbone.View.extend({
   initialize: function(){
-    console.log('in my backbone view');
-    this.render();
   },
 
   render: function(){
-    $('body').prepend('<p>working!!!!!!!!!!!!!!!!!!!!!</p>');
+    $('h1.largeHeader').replaceWith('<h1 class="largeHeader">FOO</h1>');
+    console.log($('h1.largeHeader'));
+    return this;
   }
 });
+
+var appView = new AppView();
+appView.render();
 
 var sayHi = function() {
   $('#test').click(function() {
