@@ -356,15 +356,13 @@ Enter Browserify
 (link to keynote)
 
 Install yet more grunt helpers
-`npm install --save-dev grunt-contrib-copy grunt-contrib-clean grunt-browserify`
+`npm install --save-dev grunt-contrib-copy grunt-contrib-clean grunt-browserify debowerify`
 
 - copy - copies images, plain .css, and .html files
 - clean - deletes a folder (like our dist folder)
 - browserify - integrates grunt and browserify so we don't have to run browserify
   from the command line
-
-`npm install debowerify --save-dev`
-Debowerify lets us use Bower to manage front-end assets, and also browserify to
+- debowerify lets us use Bower to manage front-end assets, and also browserify to
 use them as CommonJS modules. Boy, bet you can't you wait for native ES6 modules!
 
 Start modifying your `Gruntfile.js` to include options for browserify
@@ -510,6 +508,33 @@ module.exports = function(grunt) {
 
 ```
 
+Create a `browser.js` file in your `assets/js` folder with:
+
+```javascript
+'use strict';
+/*jshint unused:false */
+
+// load jquery et all via browserify
+var $          = require('jquery');
+var _          = require('underscore');
+var Backbone   = require('backbone');
+Backbone.$      = $;
+
+var AppView = Backbone.View.extend({
+  initialize: function(){
+  },
+
+  render: function(){
+    $('h1.largeHeader').replaceWith('<h1 class="largeHeader">FOO</h1>');
+    console.log($('h1.largeHeader'));
+    return this;
+  }
+});
+
+var appView = new AppView();
+appView.render();
+````
+
 #### Copy in HTML and Image assets to public
 #### Hook up Sass
 
@@ -517,3 +542,19 @@ put ` grunt.loadNpmTasks('grunt-sass');` in your `Gruntfile.js`
 
 Install Node Sass
 `npm install grunt-sass --save-dev`
+
+Modify your Gruntfile to include a sass task:
+```javascript
+sass: {
+  dist: {
+    files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+  },
+  dev: {
+    options: {
+      includePaths: ['public/scss/'],
+      sourceComments: 'map'
+    },
+    files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+  }
+}
+```
