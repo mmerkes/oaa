@@ -30,16 +30,32 @@ module.exports = function(grunt) {
         flatten: true,
         filter: 'isFile'
       },
+      dev: {
+        expand: true,
+        cwd: 'public',
+        src: ['/css/*.css', '*.html', '/images/**/*' ],
+        dest: 'build/',
+        flatten: true,
+        filter: 'isFile'
+      }
     },
 
     browserify: {
-      all: {
+      prod: {
         src: ['public/js/*.js'],
-        dest: 'dist/app.js'
+        dest: 'dist/app.js',
+        options: {
+          transform: ['debowerify'],
+          debug: false
+        }
       },
-      options: {
-        transform: ['debowerify'],
-        debug: true
+      dev: {
+        src: ['public/js/*.js'],
+        dest: 'build/app.js',
+        options: {
+          transform: ['debowerify'],
+          debug: true
+        }
       }
     },
 
@@ -111,7 +127,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('build:dev', ['clean:dev', 'browserify:app', 'browserify:test', 'jshint:dev', 'less:transpile', 'concat', 'copy:dev']);
+  grunt.registerTask('build:dev',  ['clean:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
+  grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
   grunt.registerTask('server', [ 'jshint', 'express:dev','watch:express' ]);
   grunt.registerTask('test:acceptance',['express:dev','casper']);

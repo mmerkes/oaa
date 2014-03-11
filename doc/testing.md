@@ -363,7 +363,9 @@ Install yet more grunt helpers
 - browserify - integrates grunt and browserify so we don't have to run browserify
   from the command line
 
-`npm install debowerify --save`
+`npm install debowerify --save-dev`
+Debowerify lets us use Bower to manage front-end assets, and also browserify to
+use them as CommonJS modules. Boy, bet you can't you wait for native ES6 modules!
 
 Start modifying your `Gruntfile.js` to include options for browserify
 
