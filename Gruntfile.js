@@ -98,7 +98,7 @@ module.exports = function(grunt) {
       },
       express: {
         files:  [ 'app.js','models/**/*.js','routes/**/*.js','assets/**/*' ],
-        tasks:  [ 'sass:dev', 'express:dev' ],
+        tasks:  [ 'sass:dev', 'browserify:dev', 'express:dev' ],
         options: {
           // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions.
           // Without this option specified express won't be reloaded
