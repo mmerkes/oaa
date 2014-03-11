@@ -17,7 +17,7 @@ module.exports = function(grunt) {
     clean: {
       build: ['build'],
       dev: {
-        src: ['build/app.js', 'build/<%= pkg.name %>.css', 'build/<%= pkg.name %>.js']
+        src: ['build/**/*']
       },
       prod: ['dist']
     },
@@ -25,34 +25,34 @@ module.exports = function(grunt) {
     copy: {
       all: {
         expand: true,
-        cwd: 'public',
-        src: ['/css/*.css', '*.html', '/images/**/*' ],
+        cwd: 'assets',
+        src: ['css/*.css', '*.html', 'images/**/*' ],
         dest: 'dist/',
         flatten: true,
         filter: 'isFile'
       },
       dev: {
         expand: true,
-        cwd: 'public',
-        src: ['/css/*.css', '*.html', '/images/**/*' ],
+        cwd: 'assets',
+        src: ['css/*.css', '*.html', 'images/**/*' ],
         dest: 'build/',
-        flatten: true,
+        flatten: false,
         filter: 'isFile'
       }
     },
 
     browserify: {
       prod: {
-        src: ['public/js/*.js'],
-        dest: 'dist/app.js',
+        src: ['assets/js/*.js'],
+        dest: 'dist/browser.js',
         options: {
           transform: ['debowerify'],
           debug: false
         }
       },
       dev: {
-        src: ['public/js/*.js'],
-        dest: 'build/app.js',
+        src: ['assets/js/*.js'],
+        dest: 'build/browser.js',
         options: {
           transform: ['debowerify'],
           debug: true
@@ -97,8 +97,8 @@ module.exports = function(grunt) {
         tasks:['jshint']
       },
       express: {
-        files:  [ 'app.js','models/**/*.js','routes/**/*.js' ],
-        tasks:  [ 'express:dev' ],
+        files:  [ 'app.js','models/**/*.js','routes/**/*.js','assets/**/*' ],
+        tasks:  [ 'sass:dev', 'express:dev' ],
         options: {
           // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions.
           // Without this option specified express won't be reloaded
@@ -128,22 +128,22 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: {'styles.css': 'styles.scss'}
+        files: {'build/css/styles.css': 'assets/scss/styles.scss'}
       },
       dev: {
         options: {
           includePaths: ['public/scss/'],
           sourceComments: 'map'
         },
-        files: {'build/styles.css': 'public/scss/styles.scss'}
+        files: {'build/css/styles.css': 'assets/scss/styles.scss'}
       }
     }
   });
 
-  grunt.registerTask('build:dev',  ['clean:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
+  grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
-  grunt.registerTask('server', [ 'jshint', 'build:dev', 'express:dev','watch:express' ]);
+  grunt.registerTask('server', [ 'build:dev', 'express:dev','watch:express' ]);
   grunt.registerTask('test:acceptance',['express:dev','casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 
