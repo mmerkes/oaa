@@ -11,5 +11,3 @@ var sayHi = function() {
     $('#test').fadeOut('slow');
   });
 };
-
-sayHi();

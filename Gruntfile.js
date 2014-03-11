@@ -128,14 +128,14 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: [{'styles.css': 'styles.scss'}]
+        files: {'styles.css': 'styles.scss'}
       },
       dev: {
         options: {
           includePaths: ['public/scss/'],
           sourceComments: 'map'
         },
-        files: [{'styles.css': 'styles.scss'}]
+        files: {'build/styles.css': 'public/scss/styles.scss'}
       }
     }
   });
