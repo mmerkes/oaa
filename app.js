@@ -9,6 +9,7 @@ var app = express();
 
 app.configure(function() {
   app.use(express.bodyParser());
+  app.use(express.static(path.join(__dirname, 'build')));
   app.use(app.router);
 });
 
