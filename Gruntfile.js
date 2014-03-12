@@ -10,6 +10,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-casper');
   grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-mongoimport');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -136,6 +137,35 @@ module.exports = function(grunt) {
           sourceComments: 'map'
         },
         files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+      }
+    },
+    mongoimport: {
+      options: {
+        db : 'my-store',
+        //optional
+        //host : 'localhost',
+        //port: '27017',
+        //username : 'username',
+        //password : 'password',
+        //stopOnError : false,
+        collections : [
+          {
+            name : 'user',
+            type : 'json',
+            file : 'db/seeds/users.json',
+            jsonArray : true,  //optional
+            upsert : true,  //optional
+            drop : true  //optional
+          },
+          {
+            name : 'meetings',
+            type :'json',
+            file : 'db/seeds/meetings.json',
+            jsonArray : true,
+            upsert : true,
+            drop : true
+          }
+        ]
       }
     }
   });

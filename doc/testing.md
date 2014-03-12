@@ -558,3 +558,15 @@ sass: {
   }
 }
 ```
+
+### Create a Seeds feature
+
+You frequently need sample data to test with or use in development. This data is
+called seed data.
+
+We are going to use the
+[grunt-mongoimport](https://www.npmjs.org/package/grunt-mongoimport) npm package.
+
+`npm install grunt-mongoimport --save-dev`
+
+add `grunt.loadNpmTasks(‘grunt-mongoimport’);` to your `Gruntfile.js`.
