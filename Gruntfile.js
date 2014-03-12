@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     copy: {
       prod: {
         expand: true,
-        cwd: 'assets',
+        cwd: 'app/assets',
         src: ['css/*.css', '*.html', 'images/**/*' ],
         dest: 'dist/',
         flatten: true,
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
       },
       dev: {
         expand: true,
-        cwd: 'assets',
+        cwd: 'app/assets',
         src: ['css/*.css', '*.html', 'images/**/*' ],
         dest: 'build/',
         flatten: false,
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 
     browserify: {
       prod: {
-        src: ['assets/js/*.js'],
+        src: ['app/assets/js/*.js'],
         dest: 'dist/browser.js',
         options: {
           transform: ['debowerify'],
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
         }
       },
       dev: {
-        src: ['assets/js/*.js'],
+        src: ['app/assets/js/*.js'],
         dest: 'build/browser.js',
         options: {
           transform: ['debowerify'],
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
         tasks:['jshint']
       },
       express: {
-        files:  [ 'server.js','models/**/*.js','routes/**/*.js','assets/**/*' ],
+        files:  [ 'server.js','models/**/*.js','routes/**/*.js','app/assets/**/*' ],
         tasks:  [ 'sass:dev', 'browserify:dev', 'express:dev' ],
         options: {
           // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions.
@@ -129,14 +129,14 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+        files: {'build/css/styles.css': 'app/assets/scss/styles.scss'}
       },
       dev: {
         options: {
           includePaths: ['public/scss/'],
           sourceComments: 'map'
         },
-        files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+        files: {'build/css/styles.css': 'app/assets/scss/styles.scss'}
       }
     },
     mongoimport: {
