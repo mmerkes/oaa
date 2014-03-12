@@ -150,7 +150,7 @@ module.exports = function(grunt) {
         //stopOnError : false,
         collections : [
           {
-            name : 'user',
+            name : 'users',
             type : 'json',
             file : 'db/seeds/users.json',
             jsonArray : true,  //optional
