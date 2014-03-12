@@ -6,7 +6,7 @@
     "Ivan Storck <ivanoats@gmail.com>"
   ],
   "description": "Our Agenda App",
-  "main": "app.js",
+  "main": "server.js",
   "license": "MIT",
   "private": true,
   "ignore": [
