@@ -124,11 +124,7 @@ module.exports = function(grunt) {
     jshint: {
       all: ['Gruntfile.js', 'server.js', 'models/**/*.js', 'test/**/*.js'],
       options: {
-        jshintrc: true,
-        globals: {
-          console: true,
-          module: true
-        }
+        jshintrc: true
       }
     },
     sass: {
