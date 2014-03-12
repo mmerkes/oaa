@@ -141,7 +141,7 @@ module.exports = function(grunt) {
     },
     mongoimport: {
       options: {
-        db : 'my-store',
+        db : 'oaa',
         //optional
         //host : 'localhost',
         //port: '27017',
