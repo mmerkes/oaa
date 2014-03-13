@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.PATH = '/usr/local/opt/nvm/v0.10.26/bin/:' + process.env.PATH;
+process.env.PHANTOMJS_EXECUTABLE ='/usr/local/opt/nvm/v0.10.26/bin/phantomjs';
 
 module.exports = function(grunt) {
 
@@ -129,14 +129,14 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+        files: {'build/css/styles.css': 'app/assets/scss/styles.scss'}
       },
       dev: {
         options: {
-          includePaths: ['public/scss/'],
+          includePaths: ['app/assets/scss/'],
           sourceComments: 'map'
         },
-        files: {'build/css/styles.css': 'assets/scss/styles.scss'}
+        files: {'build/css/styles.css': 'app/assets/scss/styles.scss'}
       }
     },
     mongoimport: {
