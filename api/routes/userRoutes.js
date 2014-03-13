@@ -33,6 +33,7 @@ exports.newUser = function(req, res) {
 
 exports.updateUser = function(req, res) {
   var id = req.params.id;
+  delete req.body._id;
   var user = req.body;
   User.update({'_id': String(id)}, user, function(err){
     if(err) {
