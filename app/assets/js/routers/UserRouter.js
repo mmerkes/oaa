@@ -21,11 +21,12 @@ module.exports = Backbone.Router.extend({
 
   index: function(){
     this.userList.fetch();
+    $('.container').replaceWith(this.userListView.el);
   },
 
   initialize: function(){
     this.userList = new UserCollection();
     this.userListView = new UserCollectionView({collection: this.userList});
-    $('.container').replaceWith(this.userListView.el);
+
   }
 });
