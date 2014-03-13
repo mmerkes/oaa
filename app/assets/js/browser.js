@@ -5,30 +5,24 @@
 var $          = require('jquery');
 var _          = require('underscore');
 var Backbone   = require('backbone');
-Backbone.$      = $;
+Backbone.$     = $;
 
-var User = Backbone.Model.extend({
-  idAttribute: '_id',
-  urlRoot: 'http://localhost:3000/api/v1/users'
-  //url: '/api/v1/users',
-  //paramRoot: 'user'
- 
-});
-
-var user = new User({first_name: 'Steve', last_name: 'McQueen'});
+var User = require('./models/User');
+var UserView = require('./views/UserView');
+$(function() {
+var user = new User({first_name: "Steve", last_name: "McQueen"});
 user.save({},{
   success: function(){
-    console.log("sdfsdfsdfsfdf");
-    user.set("first_name", "Jack"); 
-    user.save({},{patch: true});
+    user.set('first_name', 'Greg');
+    user.save();
+  },
+  error: function(err){
+    console.log(err);
   }
 });
 
-console.log(user.get("_id"))
-
-//user.set("first_name", "Jack"); 
-//user.save(); 
-
-//console.log("oosdfs");
-
-
+var userView = new UserView({model: user});
+console.log(userView.el);
+console.log('.container');
+$('.container').append(userView.el);
+});

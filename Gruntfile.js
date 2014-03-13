@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         cwd: 'app/assets',
         src: ['css/*.css', '*.html', 'images/**/*' ],
         dest: 'dist/',
-        flatten: true,
+        flatten: false,
         filter: 'isFile'
       },
       dev: {
