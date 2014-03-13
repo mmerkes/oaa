@@ -29,6 +29,10 @@ app.put('/api/v1/users/:id', users.updateUser);
 
 app.delete('/api/v1/users/:id', users.deleteUser);
 
+app.get('/users*', function(req, res) {
+  res.redirect('/#users' + req.params)
+});
+
 var server = http.createServer(app);
 
 server.listen(3000);
