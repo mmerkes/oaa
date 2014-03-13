@@ -97,11 +97,11 @@ module.exports = function(grunt) {
     },
     watch: {
       all: {
-        files:['server.js', '**/*.js' ],
+        files:['server.js', './**/*.js' ],
         tasks:['jshint']
       },
       express: {
-        files:  [ 'server.js','models/**/*.js','routes/**/*.js','app/assets/**/*' ],
+        files:  [ 'server.js','api/**/*','app/assets/**/*.js' ],
         tasks:  [ 'sass:dev', 'browserify:dev', 'express:dev' ],
         options: {
           // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions.
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      all: ['Gruntfile.js', 'server.js', 'models/**/*.js', 'test/**/*.js'],
+      all: ['Gruntfile.js', 'server.js', 'api/**/*.js', 'app/**/*.js'],
       options: {
         jshintrc: true
       }
