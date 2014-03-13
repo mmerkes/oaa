@@ -34,10 +34,8 @@ exports.newUser = function(req, res) {
 exports.updateUser = function(req, res) {
   var id = req.params.id;
   var user = req.body;
-  delete user._id
   User.update({'_id': String(id)}, user, function(err){
     if(err) {
-      res.writeHead(500);
       res.send({'error': err});
     } else {
       res.send({msg: 'success'});

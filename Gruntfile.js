@@ -1,4 +1,7 @@
 'use strict';
+
+process.env.PHANTOMJS_EXECUTABLE ='/usr/local/opt/nvm/v0.10.26/bin/phantomjs';
+
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-simple-mocha');
@@ -110,7 +113,8 @@ module.exports = function(grunt) {
     casper: {
       acceptance : {
         options : {
-          test : true
+          test : true,
+          'log-level': 'debug'
         },
         files : {
           'test/acceptance/casper-results.xml' : ['test/acceptance/*_test.js']
@@ -120,11 +124,7 @@ module.exports = function(grunt) {
     jshint: {
       all: ['Gruntfile.js', 'server.js', 'models/**/*.js', 'test/**/*.js'],
       options: {
-        jshintrc: true,
-        globals: {
-          console: true,
-          module: true
-        }
+        jshintrc: true
       }
     },
     sass: {
@@ -150,7 +150,7 @@ module.exports = function(grunt) {
         //stopOnError : false,
         collections : [
           {
-            name : 'user',
+            name : 'users',
             type : 'json',
             file : 'db/seeds/users.json',
             jsonArray : true,  //optional
