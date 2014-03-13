@@ -1,15 +1,18 @@
 'use strict';
 /*global casper*/
 
-casper.test.begin('testing our REST API', 1, function suite(test) {
+casper.test.begin('home page', 3, function suite(test) {
 
-  casper.start('http://localhost:3000/api/v1/users', function() {
+  casper.start('http://localhost:3000/', function() {
     test.assertHttpStatus(200);
   });
 
   casper.then(function(){
-    // we will replace this test with real user acceptance tests later
-    this.echo(this.getHTML('body'));
+    test.assertTitle('OurAgendaApp | Home', 'title is OurAgendaApp');
+  });
+
+  casper.then(function() {
+    test.assertSelectorHasText('h1.largeHeader','OurAgendaApp');
   });
 
   casper.run(function(){

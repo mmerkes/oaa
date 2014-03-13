@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.PHANTOMJS_EXECUTABLE ='/usr/local/opt/nvm/v0.10.26/bin/phantomjs';
+process.env.PHANTOMJS_EXECUTABLE = process.env.PHANTOMJS_EXECUTABLE || '/usr/local/opt/nvm/v0.10.26/bin/phantomjs';
 
 module.exports = function(grunt) {
 
@@ -114,7 +114,7 @@ module.exports = function(grunt) {
       acceptance : {
         options : {
           test : true,
-          'log-level': 'debug'
+          //'log-level': 'debug'
         },
         files : {
           'test/acceptance/casper-results.xml' : ['test/acceptance/*_test.js']
