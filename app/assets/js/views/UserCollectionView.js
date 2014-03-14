@@ -2,9 +2,11 @@
 
 var Backbone = require('backbone');
 var UserView = require('./UserView');
-//var User = require('../models/User');
 
 module.exports = Backbone.View.extend({
+  tagName: 'div',
+  className: 'grid col_12',
+
   initialize: function(){
     this.collection.on('add', this.addUser, this);
     this.collection.on('reset', this.addAll, this);
