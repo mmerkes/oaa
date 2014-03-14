@@ -1,3 +1,4 @@
+'use strict';
 /**
  * New Relic agent configuration.
  *

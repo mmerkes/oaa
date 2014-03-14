@@ -122,7 +122,7 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      all: ['Gruntfile.js', 'server.js', 'api/**/*.js', 'app/**/*.js'],
+      all: ['Gruntfile.js', 'server.js', 'api/**/*.js', 'app/assets**/*.js'],
       options: {
         jshintrc: true
       }

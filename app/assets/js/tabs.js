@@ -1,5 +1,4 @@
-
-    //<![CDATA[
+//jshint ignore:start
 
     var tabLinks = new Array();
     var contentDivs = new Array();
@@ -67,5 +66,4 @@
       return url.substring( hashPos + 1 );
     }
 
-    //]]>
-  
+//jshint ignore:end
