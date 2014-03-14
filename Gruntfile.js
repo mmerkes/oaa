@@ -173,8 +173,8 @@ module.exports = function(grunt) {
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
-  grunt.registerTask('server', [ 'build:dev', 'express:dev','watch:express' ]);
-  grunt.registerTask('test:acceptance',['express:dev','casper']);
+  grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express' ]);
+  grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 
 };

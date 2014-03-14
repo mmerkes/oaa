@@ -8,7 +8,6 @@ Backbone.$   = $;
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'user',
-  template: _.template( $('script#userTemplate' ).text() ),
 
   initialize: function() {
     this.render();
@@ -16,6 +15,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var attributes = this.model.toJSON();
-    this.$el.html(this.template(attributes));
+    var template = _.template( $('script#userTemplate' ).html() );
+    this.$el.html(template(attributes));
   }
 });
