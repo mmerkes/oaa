@@ -22,7 +22,7 @@ module.exports = Backbone.Router.extend({
 
   index: function(){
     this.userList.fetch();
-    $('.container').replaceWith(this.userListView.el);
+    $('.mainContent').replaceWith(this.userListView.el);
   },
 
   initialize: function(){

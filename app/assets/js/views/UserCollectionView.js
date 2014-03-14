@@ -2,7 +2,7 @@
 
 var Backbone = require('backbone');
 var UserView = require('./UserView');
-var User = require('../models/User');
+//var User = require('../models/User');
 
 module.exports = Backbone.View.extend({
   initialize: function(){
@@ -12,7 +12,6 @@ module.exports = Backbone.View.extend({
 
   addUser: function(user){
     var userView = new UserView({model: user});
-    console.log(userView.el);
     this.$el.append(userView.el);
   },
 
