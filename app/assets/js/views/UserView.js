@@ -2,11 +2,14 @@
 
 var Backbone = require('backbone');
 var _        = require('underscore');
+var $        = require('jquery');
+Backbone.$   = $;
 
 module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'user',
-  template: _.template('first_name: <%= first_name %>, </br> last_name: <%= last_name %></br>email: <%= email %>'),
+//  template: _.template( $('script.userTemplate' ).text.trim() ),
+  template: _.template('foo'),
 
   initialize: function() {
     this.render();

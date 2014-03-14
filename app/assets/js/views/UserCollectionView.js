@@ -2,7 +2,6 @@
 
 var Backbone = require('backbone');
 var UserView = require('./UserView');
-//var User = require('../models/User');
 
 module.exports = Backbone.View.extend({
   initialize: function(){
