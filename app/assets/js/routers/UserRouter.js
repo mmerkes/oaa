@@ -17,7 +17,7 @@ module.exports = Backbone.Router.extend({
   },
 
   start: function(){
-    Backbone.history.start({pushState: true});
+    Backbone.history.start({pushState: false});
   },
 
   index: function(){

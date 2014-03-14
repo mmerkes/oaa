@@ -101,7 +101,7 @@ module.exports = function(grunt) {
         tasks:['jshint']
       },
       express: {
-        files:  [ 'server.js','api/**/*','app/assets/**/*.js' ],
+        files:  [ 'server.js','api/**/*','app/assets/**/*' ],
         tasks:  [ 'sass:dev', 'browserify:dev', 'express:dev' ],
         options: {
           // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions.
