@@ -14,6 +14,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-casper');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-mongoimport');
+  grunt.loadNpmTasks('grunt-notify');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -60,6 +61,24 @@ module.exports = function(grunt) {
         options: {
           transform: ['debowerify'],
           debug: true
+        }
+      }
+    },
+
+    notify: {
+      server: {
+        options: {
+          message: 'Server is ready'
+        }
+      },
+      express: {
+        options: {
+          message: 'express is ready'
+        }
+      },
+      watch: {
+        options: {
+          message: 'watch'
         }
       }
     },
@@ -173,7 +192,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
-  grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express' ]);
+  grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 

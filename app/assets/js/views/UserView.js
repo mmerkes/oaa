@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var attributes = this.model.toJSON();
-    var template = _.template( $('script#userTemplate' ).html() );
-    this.$el.html(template(attributes));
+    this.$el.html(_.template( $('script#userTemplate' ).html(), attributes));
+    return this;
   }
 });
