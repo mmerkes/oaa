@@ -5,6 +5,7 @@ Our Agenda App
 
 [![Dependency Status](https://gemnasium.com/codefellows/oaa.png)](https://gemnasium.com/codefellows/oaa)
 [![Code Climate](https://codeclimate.com/github/codefellows/oaa.png)](https://codeclimate.com/github/codefellows/oaa)
+[![Build Status](https://travis-ci.org/codefellows/oaa.png?branch=master)](https://travis-ci.org/codefellows/oaa)
 
 ## Installation
 From project directory...  
