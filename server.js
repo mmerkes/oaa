@@ -1,6 +1,20 @@
 'use strict';
 //jshint unused:false
-require('newrelic');
+
+// Initialize 'newrelic' if a license key is present
+if (process.env.NEWRELIC_LICENSE_KEY !== null && process.env.NEWRELIC_LICENSE_KEY !== undefined)
+{
+  // 'newrelic' module should never be able to crash the server
+  try
+  {
+    require('newrelic');
+  }
+  catch (error)
+  {
+    console.warn('New Relic has crashed on initialization.\n\n' + error.stack);
+  }
+}
+
 var express = require('express');
 var http = require('http');
 var path = require('path');
