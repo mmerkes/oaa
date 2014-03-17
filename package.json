@@ -6,7 +6,6 @@
     "express": "*",
     "mongodb": "*",
     "mongoose": "*",
-    "ejs": "*",
     "newrelic": "^1.3.2"
   },
   "devDependencies": {
@@ -26,6 +25,9 @@
     "debowerify": "^0.7.0",
     "grunt-sass": "^0.11.0",
     "grunt-mongoimport": "^0.1.1",
-    "grunt-notify": "^0.2.20"
+    "grunt-notify": "^0.2.20",
+    "handlebars": "^1.3.0",
+    "hbsfy": "^1.3.2",
+    "esprima": "^1.0.4"
   }
 }

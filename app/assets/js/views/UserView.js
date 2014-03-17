@@ -1,7 +1,6 @@
 'use strict';
 
 var Backbone = require('backbone');
-var _        = require('underscore');
 var $        = require('jquery');
 Backbone.$   = $;
 
@@ -14,8 +13,9 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    var attributes = this.model.toJSON();
-    this.$el.html(_.template( $('script#userTemplate' ).html(), attributes));
+    var userAttributes = this.model.toJSON();
+    var template = require('../../templates/user.hbs');
+    this.$el.html(template(userAttributes));
     return this;
   }
 });
