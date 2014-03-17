@@ -2,7 +2,7 @@
 
 In this tutorial we will lay out the steps to test a RESTful web service built
 with [Node](http://nodejs.com), [Express](http://expressjs.com), and
-[Grunt](http://gruntjs.com/).
+[Grunt](http://gruntjs.com/). And, we put a BackboneJS Front-End app on top of it.
 
 ## Setup
 Set up your package.json to track dependencies:
@@ -341,7 +341,7 @@ module.exports = function(grunt) {
 I've re-organied the tasks a bit above, and added a `test:acceptance` task that
 sets up the express server in dev mode, and then runs the casper tests.
 
-### Set up Bower
+## Set up Bower
 `bower init`
 defaults are ok
 
@@ -535,8 +535,8 @@ var appView = new AppView();
 appView.render();
 ````
 
-#### Copy in HTML and Image assets to public
-#### Hook up Sass
+## Copy in HTML and Image assets to public
+### Hook up Sass
 
 put ` grunt.loadNpmTasks('grunt-sass');` in your `Gruntfile.js`
 
@@ -559,7 +559,7 @@ sass: {
 }
 ```
 
-### Create a Seeds feature
+## Create a Seeds Build Task
 
 You frequently need sample data to test with or use in development. This data is
 called seed data.
@@ -570,3 +570,93 @@ We are going to use the
 `npm install grunt-mongoimport --save-dev`
 
 add `grunt.loadNpmTasks(‘grunt-mongoimport’);` to your `Gruntfile.js`.
+
+#### add seed files
+in db/seeds/users.json etc...
+
+add a grunt task:
+```javascript
+mongoimport: {
+  options: {
+    db : 'oaa',
+    //optional
+    //host : 'localhost',
+    //port: '27017',
+    //username : 'username',
+    //password : 'password',
+    //stopOnError : false,
+    collections : [
+      {
+        name : 'users',
+        type : 'json',
+        file : 'db/seeds/users.json',
+        jsonArray : true,  //optional
+        upsert : true,  //optional
+        drop : true  //optional
+      },
+      {
+        name : 'meetings',
+        type :'json',
+        file : 'db/seeds/meetings.json',
+        jsonArray : true,
+        upsert : true,
+        drop : true
+      }
+    ]
+  }
+}
+```
+
+## Use Handlebars for templating with Backbone, Browserify, and Grunt
+
+`npm install hbsfy --save-dev`
+
+Bower or NPM? well, hbsify already installed handlebars, so we're all set.
+
+Add in the hbsify transform to browserify
+
+```javascript
+
+browserify: {
+  prod: {
+    src: ['app/assets/js/*.js'],
+    dest: 'dist/browser.js',
+    options: {
+      transform: ['debowerify','hbsfy'],
+      debug: false
+    }
+  },
+  dev: {
+    src: ['app/assets/js/*.js'],
+    dest: 'build/browser.js',
+    options: {
+      transform: ['debowerify','hbsfy'],
+      debug: true
+    }
+  }
+}
+```
+
+#### Create a folder for templates
+
+`mkdir -p app/assets/templates`
+
+`touch user.hbs`
+
+edit user.hbs
+
+```html
+<p class="full_name">{{ first_name }} {{ last_name }}</p>
+<p class="email"><a href="mailto:{{ email }}">{{ email }}</a></p>
+```
+
+Change the UserView.js render method to load the template:
+
+```javascript
+render: function() {
+  var userAttributes = this.model.toJSON();
+  var template = require('../../templates/user.hbs');
+  this.$el.html(template(userAttributes));
+  return this;
+}
+```

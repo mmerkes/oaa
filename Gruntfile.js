@@ -51,7 +51,7 @@ module.exports = function(grunt) {
         src: ['app/assets/js/*.js'],
         dest: 'dist/browser.js',
         options: {
-          transform: ['debowerify'],
+          transform: ['debowerify','hbsfy'],
           debug: false
         }
       },
@@ -59,7 +59,7 @@ module.exports = function(grunt) {
         src: ['app/assets/js/*.js'],
         dest: 'build/browser.js',
         options: {
-          transform: ['debowerify'],
+          transform: ['debowerify','hbsfy'],
           debug: true
         }
       }
