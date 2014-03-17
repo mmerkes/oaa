@@ -3,6 +3,8 @@ oaa
 
 Our Agenda App
 
+[![Dependency Status](https://gemnasium.com/codefellows/oaa.png)](https://gemnasium.com/codefellows/oaa)
+
 ## Installation
 From project directory...  
 1. ```npm install```  
