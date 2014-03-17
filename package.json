@@ -31,6 +31,6 @@
     "esprima": "^1.0.4"
   },
   "scripts": {
-    "test": "mkdir build && grunt test"
+    "test": "mkdir -p build && grunt test --trace --verbose"
   }
 }
