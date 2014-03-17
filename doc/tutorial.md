@@ -687,3 +687,17 @@ render: function() {
   return this;
 }
 ```
+
+## Continuous Integraion
+DRAFT
+
+edit `.travis.yml`
+
+```yaml
+language: node_js
+node_js:
+  - "0.10"
+before_install: npm install -g grunt-cli
+install: npm install
+before_script: grunt build:dev
+```

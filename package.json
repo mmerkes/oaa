@@ -29,5 +29,8 @@
     "handlebars": "^1.3.0",
     "hbsfy": "^1.3.2",
     "esprima": "^1.0.4"
+  },
+  "scripts": {
+    "test": "grunt test"
   }
 }
