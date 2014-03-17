@@ -1,6 +1,11 @@
 'use strict';
 //jshint unused:false
-require('newrelic');
+
+if (process.env.NEWRELIC_LICENSE_KEY != null && process.env.NEWRELIC_LICENSE_KEY != undefined)
+{
+	require('newrelic');
+}
+
 var express = require('express');
 var http = require('http');
 var path = require('path');
