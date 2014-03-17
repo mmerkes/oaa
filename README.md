@@ -16,3 +16,8 @@ From project directory...
 ```test```: jshint, simplemocha:dev  
 ```test:acceptance```: express:dev, casper  
 ```server```: build:dev, express:dev, watch:express  
+
+## Documentation
+
+Check out the Markdown document in
+[doc/tutorial.md](https://github.com/codefellows/oaa/blob/master/doc/tutorial.md)

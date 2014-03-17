@@ -607,13 +607,38 @@ mongoimport: {
 }
 ```
 
+## Use Underscore Templates Based on a Script Tag in Index.
+
+You can create templates and store small ones in index.html
+
+```
+<script type="text/x-underscore" id="userTemplate">
+	<p class="full_name"><%= first_name %> <%= last_name %></p>
+	<p class="email"><a href="mailto:<%= email %>"><%= email %></a></p>
+</script>
+```
+
+Use jQuery to grab the template and compile it in your view render method.
+
+```javascript
+  render: function() {
+    var attributes = this.model.toJSON();
+    var template = _.template( $('script#userTemplate' ).html() );
+    this.$el.html(template(attributes));
+  }
+```
+
 ## Use Handlebars for templating with Backbone, Browserify, and Grunt
 
 `npm install hbsfy --save-dev`
 
-Bower or NPM? well, hbsify already installed handlebars, so we're all set.
+More info at:
+https://github.com/epeli/node-hbsfy
 
-Add in the hbsify transform to browserify
+_Bower or NPM?_ Well, hbsify already installed handlebars via npm, so we're all
+set. Debate over.
+
+Add in the __hbsify__ transform to browserify in your `Gruntfile.js`
 
 ```javascript
 
@@ -641,9 +666,11 @@ browserify: {
 
 `mkdir -p app/assets/templates`
 
-`touch user.hbs`
+And a file to store the handlebars template:
 
-edit user.hbs
+`touch app/assets/templates/user.hbs`
+
+edit `user.hbs` (in your favorite editor) to include:
 
 ```html
 <p class="full_name">{{ first_name }} {{ last_name }}</p>
