@@ -8,4 +8,6 @@ before_install:
 install:
   - npm install
   - bower install
-before_script: grunt build:dev
+before_script:
+  - grunt mongoimport
+  - grunt build:dev
