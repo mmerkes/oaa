@@ -16,11 +16,11 @@ From project directory...
 
 ### Acceptance Tests
 Acceptance tests need:
+
 1. phantomjs and casperjs installed globally:
 `npm install -g phantomjs casperjs` is the preferred method although you may
 need to use your system package manager (brew, apt-get, yum, etc) to install them.
 Set a PHANTOMJS_EXECUTABLE environment variable to point to your PhantomJS install.
-
 2. some seed data to pass:
 `grunt mongoimport && grunt test:acceptance`
 
