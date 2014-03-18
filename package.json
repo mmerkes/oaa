@@ -34,7 +34,7 @@
     "grunt-mocha-cov": "^0.2.1"
   },
   "scripts": {
-    "test": "mkdir -p build && grunt test --trace --verbose"
+    "test": "mkdir -p build && grunt travis --trace --verbose"
   },
   "config": {
     "blanket": {
