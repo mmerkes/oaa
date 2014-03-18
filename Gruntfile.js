@@ -119,10 +119,18 @@ module.exports = function(grunt) {
     mochacov: {
       coverage: {
         options: {
-          coveralls: true
+          reporter: 'mocha-term-cov-reporter',
+          coverage: true
         }
       },
-      test: {
+      coveralls: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci'
+          }
+        }
+      },
+      unit: {
         options: {
           reporter: 'spec',
           require: ['chai']
@@ -135,7 +143,9 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        files: 'test/*.js'
+        files: 'test/*.js',
+        ui: 'bdd',
+        colors: true
       }
     },
 
@@ -217,7 +227,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['jshint', 'mochacov:test' ]);
-  grunt.registerTask('travis', ['jshint', 'mochacov:coverage']);
+  grunt.registerTask('travis', ['jshint', 'mochacov:unit', 'mochacov:coverage', 'mochacov:coveralls']);
   grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);

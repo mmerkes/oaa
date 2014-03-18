@@ -31,15 +31,21 @@
     "handlebars": "^1.3.0",
     "hbsfy": "^1.3.2",
     "esprima": "^1.0.4",
-    "grunt-mocha-cov": "^0.2.1"
+    "grunt-mocha-cov": "^0.2.1",
+    "mocha-term-cov-reporter": "^0.2.0"
   },
   "scripts": {
     "test": "mkdir -p build && grunt travis --trace --verbose"
   },
   "config": {
     "blanket": {
-      "pattern": ["api"],
-      "data-cover-never": ["node_modules", "test"]
+      "pattern": [
+        "api"
+      ],
+      "data-cover-never": [
+        "node_modules",
+        "test"
+      ]
     }
   }
 }
