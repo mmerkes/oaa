@@ -1,45 +1,44 @@
 'use strict';
-var User = require('../models/User');
+var Meeting = require('../models/Meeting');
 
 exports.collection = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  User.find({}, function(err, users) {
+  Meeting.find({}, function(err, meetings) {
     if(err) {
       res.send(500, {'error': err});
     } else {
-      res.send(JSON.stringify(users));
+      res.send(meetings);
     }
   });
 };
 
 exports.findById = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  var id = req.params.id;
-  User.findOne({'_id': String(id)}, function(err, responseUser) {
+  Meeting.findOne({'_id', String(req.params.id)}, function(err, responseMeeting) {
     if(err) {
       res.send(500, {'error': err});
     } else {
-      res.send(responseUser);
+      res.send(responseMeeting);
     }
   });
 };
 
 exports.create = function(req, res) {
-  var user = new User(req.body);
-  user.save(function(err, responseUser) {
+  res.setHeader('Content-Type', 'application/json');
+  var meeting = new Meeting(req.body);
+  meeting.save(function(err, responseMeeting) {
     if(err) {
       res.send(500, {'error': err});
     } else {
-      res.send(responseUser);
+      res.send(responseMeeting);
     }
   });
 };
 
 exports.update = function(req, res) {
-  var id = req.params.id;
+  res.setHeader('Content-Type', 'application/json');
   delete req.body._id;
-  var user = req.body;
-  User.update({'_id': String(id)}, user, function(err){
+  User.update({'_id': String(id)}, String(req.params.id), req.body, function(err){
     if(err) {
       res.send(500, {'error': err});
     } else {
@@ -49,12 +48,12 @@ exports.update = function(req, res) {
 };
 
 exports.destroy = function(req, res) {
-  var id = String(req.params.id);
-  User.remove({'_id': id}, function(err){
-    if(err){
+  res.setHeader('Content-Type', 'application/json');
+  Meeting.remove({'_id': String(req.params.id)}, function(err) {
+    if(err) {
       res.send(500, {'error': err});
     } else {
-      res.send({'msg': 'success'});
+      res.send({msg: 'success'});
     }
   });
 };

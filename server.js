@@ -32,16 +32,29 @@ app.configure('development', function(){
 });
 
 var users = require('./api/routes/userRoutes');
+var meetings = require('./api/routes/meetingRoutes');
+var agendaItems = require('./api/routes/agendaItems');
 
+// Users routes
 app.get('/api/v1/users', users.collection);
-
 app.get('/api/v1/users/:id', users.findById);
+app.post('/api/v1/users', users.create);
+app.put('/api/v1/users/:id', users.update);
+app.delete('/api/v1/users/:id', users.destroy);
 
-app.post('/api/v1/users', users.newUser);
+// Meetings Routes
+app.get('/api/v1/meetings', meetings.collection);
+app.get('/api/v1/meetings/:id', meetings.findById);
+app.post('/api/v1/meetings', meetings.create);
+app.put('/api/v1/meetings/:id', meetings.update);
+app.delete('/api/v1/meetings/:id', meetings.destroy);
 
-app.put('/api/v1/users/:id', users.updateUser);
-
-app.delete('/api/v1/users/:id', users.deleteUser);
+// Agenda Item Routes
+app.get('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.colleciton);
+app.get('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.findById);
+app.post('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.create);
+app.put('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.update);
+app.delete('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.destroy);
 
 // uncomment this if you want to use pushState:true in UserRouter.js start
 // app.get('/users*', function(req, res) {
@@ -50,5 +63,6 @@ app.delete('/api/v1/users/:id', users.deleteUser);
 
 var server = http.createServer(app);
 
-server.listen(3000);
-console.log('Running on port 3000');
+server.listen(3000, function(){
+  console.log('Running on port 3000');
+});
