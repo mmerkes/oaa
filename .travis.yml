@@ -1,13 +1,16 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 services: mongodb
 before_install:
-  - npm install -g grunt-cli
-  - npm install -g bower
+- npm install -g grunt-cli
+- npm install -g bower
 install:
-  - npm install
-  - bower install
+- npm install
+- bower install
 before_script:
-  - grunt mongoimport
-  - grunt build:dev
+- grunt mongoimport
+- grunt build:dev
+env:
+  global:
+    secure: AwSVtVbMdaYPCY7zpikZS86pcgFxOAqWUpXlwku445YK/Immx4MJ3ArJXVU2R96xYO5LgPL9QEd+hFDzr2QkXKYraXtfG0OD07vJ0+vpNbMIgIPi4ya0OFcY11RVecaYAyz9CUQr5x72+5ZOmLulLDBj5MCz9jWyax2kYVKtu2U=

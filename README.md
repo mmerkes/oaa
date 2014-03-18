@@ -30,7 +30,8 @@ Set a PHANTOMJS_EXECUTABLE environment variable to point to your PhantomJS insta
 `build:prod`: clean:prod, browserify:prod, jshint:all, copy:prod  
 `test`: jshint, simplemocha:dev  
 `test:acceptance`: express:dev, casper  
-`server`: build:dev, express:dev, watch:express  
+`server`: build:dev, express:dev, watch:express
+`mochacov:html`: mac usage: `grunt mochacov:html > doc/coverage.html && open -a Google\ Chrome doc/coverage.html`
 
 ## Documentation
 

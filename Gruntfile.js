@@ -15,6 +15,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-mongoimport');
   grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-mocha-cov');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -114,6 +115,40 @@ module.exports = function(grunt) {
         }
       }
     },
+
+    mochacov: {
+      coverage: {
+        options: {
+          reporter: 'mocha-term-cov-reporter',
+          coverage: true
+        }
+      },
+      coveralls: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci'
+          }
+        }
+      },
+      unit: {
+        options: {
+          reporter: 'spec',
+          require: ['chai']
+        }
+      },
+      html: {
+        options: {
+          reporter: 'html-cov',
+          require: ['chai']
+        }
+      },
+      options: {
+        files: 'test/*.js',
+        ui: 'bdd',
+        colors: true
+      }
+    },
+
     watch: {
       all: {
         files:['server.js', './**/*.js' ],
@@ -191,7 +226,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
-  grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
+  grunt.registerTask('test', ['jshint', 'mochacov:test' ]);
+  grunt.registerTask('travis', ['jshint', 'mochacov:unit', 'mochacov:coverage', 'mochacov:coveralls']);
   grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
