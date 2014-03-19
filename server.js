@@ -15,14 +15,21 @@ if (process.env.NEWRELIC_LICENSE_KEY !== null && process.env.NEWRELIC_LICENSE_KE
   }
 }
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
-
-var app = express();
+var express  = require('express');
+var app      = express();
+var http     = require('http');
+var path     = require('path');
+var port     = process.env.PORT || 3000;
+var passport = require('passport');
+var flash    = require('connect-flash');
+require('./config/passport')(passport);
 
 app.configure(function() {
+  if ( process.env.NODE_ENV === 'dev') {
+    app.use(express.logger('dev'));
+  }
   app.use(express.bodyParser());
+  app.use(express.cookieParser());
   app.use(express.static(path.join(__dirname, 'build')));
   app.use(app.router);
 });
@@ -50,5 +57,5 @@ app.delete('/api/v1/users/:id', users.deleteUser);
 
 var server = http.createServer(app);
 
-server.listen(3000);
-console.log('Running on port 3000');
+server.listen(port);
+console.log('Running on port ' + port);
