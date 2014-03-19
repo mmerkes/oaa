@@ -12,7 +12,6 @@ var schema = new mongoose.Schema({
       author_id: String,
     }
   },
-  agenda_items: [{type: mongoose.Schema.Types.ObjectId, ref: 'AgendaItem'}]
 });
 
 module.exports = mongoose.model('Meeting', schema);

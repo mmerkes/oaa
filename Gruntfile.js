@@ -177,7 +177,7 @@ module.exports = function(grunt) {
     },
     mongoimport: {
       options: {
-        db : 'oaa',
+        db : 'oaa-development',
         //optional
         //host : 'localhost',
         //port: '27017',
@@ -209,7 +209,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['env:test', 'jshint', 'simplemocha:test']);
-  grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express','notify' ]);
+  grunt.registerTask('server', ['env:dev', 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 

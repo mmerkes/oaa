@@ -3,7 +3,7 @@ var AgendaItem = require('../models/AgendaItem');
 
 exports.collection = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  AgendaItem.find({}, function(err, agendaItems){
+  AgendaItem.find({'_meeting': req.params.meeting_id}, function(err, agendaItems){
     if(err) {
       res.send(500, {'error': err});
     } else {
@@ -26,16 +26,15 @@ exports.findById = function(req, res) {
 
 exports.create = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  if(req.body._meeting === null || req.body._meeting === undefined) {
-    req.body._meeting = req.params.meeting_id;
-  }
 
+  req.body._meeting = req.params.meeting_id;
   var agendaItem = new AgendaItem(req.body);
-  agendaItem.save(function(err, responseAgendaItem) {
+
+  agendaItem.save(function(err, responseMeeting){
     if(err) {
       res.send(500, {'error': err});
     } else {
-      res.send(responseAgendaItem);
+      res.send(responseMeeting);
     }
   });
 };
