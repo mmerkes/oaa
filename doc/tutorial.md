@@ -839,7 +839,7 @@ Try out this other complexity metric tool:
 Another one with a great HTML report format:
 
 - `npm install -g plato`
-- `plato -r -d doc/complexity api app/assets/js`
+- `plato -r -l .jshintrc -d doc/complexity api app/assets/js`
 - `open doc/complexity/index.html`
 
 TODO: integrate with Grunt?
