@@ -809,12 +809,15 @@ Gemnasium monitors your project dependencies and alerts you about updates and
 security vulnerabilities.
 
 Check out [Our Gemnasium report](https://gemnasium.com/codefellows/oaa), and get
-it running for your project.
+it running for your project according to their instructions.
+Add their badge to your project README.
 
 ## Complexity
 
+### Reading
 Read chapter two of [Testable Javascript](http://shop.oreilly.com/product/0636920024699.do).
 
+### Complexity-Report
 Try out this complexity metric tool:
 [https://github.com/philbooth/complexity-report](https://github.com/philbooth/complexity-report)
 
@@ -822,7 +825,29 @@ Try out this complexity metric tool:
 - `cr --help`
 - `cr app/assets/js api`
 
-## Code Climate
+TODO: Integrate with Grunt: [https://github.com/vigetlabs/grunt-complexity](https://github.com/vigetlabs/grunt-complexity)
+
+### JS-Complexity-Viz
+Try out this other complexity metric tool:
+
+[https://github.com/bahmutov/js-complexity-viz](https://github.com/bahmutov/js-complexity-viz)
+
+- `npm install -g jsc`
+- `jsc api/**/*.js app/assets/js/**/*.js`
+
+### Plato
+Another one with a great HTML report format:
+
+- `npm install -g plato`
+- `plato -r -d doc/complexity api app/assets/js`
+- `open doc/complexity/index.html`
+
+TODO: integrate with Grunt?
+
+TIP: you may want to add the complexity and coverage reports to your .gitignore.
+Because they are always changing, they will add a lot of noise to your commits.
+
+### Code Climate
 
 [Code Climate](https://codeclimate.com/) offers code quality (complexity) metrics
 for Ruby and JavaScript projects.
