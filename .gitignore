@@ -20,5 +20,3 @@ dist/
 app/bower_components/
 .sass-cache/
 bower_components/
-
-doc/coverage.html

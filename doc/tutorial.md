@@ -688,16 +688,170 @@ render: function() {
 }
 ```
 
-## Continuous Integraion
-DRAFT
+## Continuous Integration
+
+Now that your tests are running, it's time to automate them every time you push
+to GitHub. When your tests pass on your feature branch, GitHub +
+[TravisCI](http://travis-ci.org) can give you the go ahead and merge them into
+the master branch. This is how open source [continuous integration](http://en.wikipedia.org/wiki/Continuous_integration)
+works. [TravisCI](http://travis-ci.org) is free for open source projects, and as
+its name signifies, is a
+[continuous integration](http://blog.teamtreehouse.com/use-continuous-integration-continuous-deployment)
+server.
+
+An additional bonus is that setting up Travis, although at times difficult, is a
+great first step to getting a real production environment spec'd out. Knowing all
+the dependencies needed to set up Travis automatically will help you when you're
+building your deployment server automatically, too.
+
+Travis uses a '.travis.yml' file for configuration. Check out the
+[online docs](http://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
+for getting started with JavaScript/Node projects.
 
 edit `.travis.yml`
 
 ```yaml
 language: node_js
 node_js:
-  - "0.10"
-before_install: npm install -g grunt-cli
-install: npm install
-before_script: grunt build:dev
+- '0.10'
+services: mongodb
+before_install:
+- npm install -g grunt-cli
+- npm install -g bower
+install:
+- npm install
+- bower install
+before_script:
+- grunt mongoimport
+- grunt build:dev
+env:
+  global:
+    secure: SET_YOUR_OWN_COVERALLS_KEY_HERE_WITH_TRAVIS_GEM
 ```
+
+You also need to add a section to your `package.json` to let travis run the
+`npm test` command:
+
+```json
+"scripts": {
+  "test": "mkdir -p build && grunt travis --trace --verbose"
+},
+```
+
+We need to tell Travis that we are going to use their shared mongodb server. We
+need Travis to install grunt-cli and bower before even installing the dependencies
+from our project. We also need to tell Travis to load our database seeds, and
+then build the app. You can also set secure environment variables, which we will
+get to in a while later when discussing code coverage.
+
+Since you have a working ruby installed, it's easy to get a helpful tool for
+Travis installed. `gem install travis`
+You'll want to check out the brief help: `help travis` . The travis gem is also
+how you will end up encrypting any environment keys needed on TravisCI.
+
+## Code Coverage
+
+Code coverage is a measurement of how much code your tests have actually executed.
+The code coverage tools I have used are [Blanket.js](http://blanketjs.org/) and
+[Coveralls.io](http://coveralls.io/)
+
+Go ahead and sign up for [Coveralls.io](http://coveralls.io/) with your GitHub
+account.
+
+BlanketJS is available as a [stand-alone tool](http://blanketjs.org) but it's easy
+to integrate it with our Grunt build with a couple of npm packages:
+
+`npm install grunt-mocha-cov mocha-term-cov-reporter --save-dev`
+
+Put a new section into our `Gruntfile.js` for the
+[mochacov](https://github.com/mmoulton/grunt-mocha-cov)
+and [mocha-term-cov-reporter](https://github.com/jakobmattsson/mocha-term-cov-reporter)
+combo. Don't forget to check out the README's in the links above.
+
+```javascript
+mochacov: {
+  coverage: {
+    options: {
+      reporter: 'mocha-term-cov-reporter',
+      coverage: true
+    }
+  },
+  coveralls: {
+    options: {
+      coveralls: {
+        serviceName: 'travis-ci'
+      }
+    }
+  },
+  unit: {
+    options: {
+      reporter: 'spec',
+      require: ['chai']
+    }
+  },
+  html: {
+    options: {
+      reporter: 'html-cov',
+      require: ['chai']
+    }
+  },
+  options: {
+    files: 'test/*.js',
+    ui: 'bdd',
+    colors: true
+  }
+},
+```
+
+## Gemnasium
+
+Gemnasium monitors your project dependencies and alerts you about updates and
+security vulnerabilities.
+
+Check out [Our Gemnasium report](https://gemnasium.com/codefellows/oaa), and get
+it running for your project.
+
+## Complexity
+
+Read chapter two of [Testable Javascript](http://shop.oreilly.com/product/0636920024699.do).
+
+Try out this complexity metric tool:
+[https://github.com/philbooth/complexity-report](https://github.com/philbooth/complexity-report)
+
+- `npm install -g complexity-report`
+- `cr --help`
+- `cr app/assets/js api`
+
+## Code Climate
+
+[Code Climate](https://codeclimate.com/) offers code quality (complexity) metrics
+for Ruby and JavaScript projects.
+
+Please, use judgement with this tool. Don't go for all A's
+[according to the founder of Code Climate](https://gist.github.com/brynary/21369b5892525e1bd102).
+
+## Front-End testing
+
+Seattleite [Ryan Roemer](https://twitter.com/ryan_roemer) literally
+[wrote the book](http://backbone-testing.com/) on this. It's a big topic and I
+highly recommend the book. A quick summary of the book can be found in his
+[Learn Front-End Testing Slides](http://formidablelabs.github.io/learn-frontend-testing/#/title)
+Note that slides go up and down in addition to left/right. BTW, this is a
+[Reveal.js](http://lab.hakim.se/reveal-js/) presentation.
+
+To really improve our code coverage, we are going to have to improve our front-end
+testing.
+
+## Authentication and Authorization
+
+Authentication answers the question "Who are you?". Authorization answers the
+question "What are you allowed to do?"
+
+### Authentication
+We'll be using common NPM packages to abstract out the low-level details of
+authentication. For anyone that wants a more detailed view of the building blocks
+of node web app security, check out chapter seven of [The Node Cookbook]()
+
+Get the packages we'll be using and add them to our package.json:
+
+`npm install bcrupt-nodejs, passport, passport-local, connect-flash --save`
