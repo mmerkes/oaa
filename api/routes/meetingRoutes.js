@@ -14,7 +14,7 @@ exports.collection = function(req, res) {
 
 exports.findById = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  Meeting.findOne({'_id', String(req.params.id)}, function(err, responseMeeting) {
+  Meeting.findOne({'_id': String(req.params.id)}, function(err, responseMeeting) {
     if(err) {
       res.send(500, {'error': err});
     } else {
@@ -38,7 +38,7 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   delete req.body._id;
-  User.update({'_id': String(id)}, String(req.params.id), req.body, function(err){
+  Meeting.update({'_id': String(req.params.id)}, req.body, function(err) {
     if(err) {
       res.send(500, {'error': err});
     } else {

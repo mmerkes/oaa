@@ -15,9 +15,23 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-mongoimport');
   grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-env');
+
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+    env: {
+      options: {
+
+      },
+      dev: {
+        NODE_ENV: 'development'
+      },
+      test: {
+        NODE_ENV: 'test'
+      }
+    },
 
     clean: {
       build: ['build'],
@@ -89,7 +103,8 @@ module.exports = function(grunt) {
       },
       dev: {
         options: {
-          script: 'server.js'
+          script: 'server.js',
+          node_env: 'development'
         }
       },
       prod: {
@@ -100,17 +115,19 @@ module.exports = function(grunt) {
       },
       test: {
         options: {
-          script: 'server.js'
+          script: 'server.js',
+          node_env: 'test'
         }
       }
     },
     simplemocha: {
-      dev:{
+      test:{
         src:['test/*_test.js','!test/acceptance/*_test.js'],
         options:{
           reporter: 'spec',
           slow: 200,
-          timeout: 1000
+          timeout: 1000,
+          node_env: 'test'
         }
       }
     },
@@ -191,7 +208,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
-  grunt.registerTask('test', ['jshint', 'simplemocha:dev']);
+  grunt.registerTask('test', ['env:test', 'jshint', 'simplemocha:test']);
   grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);

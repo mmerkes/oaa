@@ -2,7 +2,6 @@
 //jshint unused:false
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/oaa');
 
 var schema = new mongoose.Schema({
   first_name: String,

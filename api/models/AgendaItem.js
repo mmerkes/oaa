@@ -1,15 +1,14 @@
 'use strict';
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb:..localhost/oaa');
 
 var schema = new mongoose.Schema({
   body: String,
-  meeting_id: String,
-  user_id: String,
   comments: {
     comment: {body: String, user_id: String}
-  }
+  },
+  _meeting: {type: String, ref: 'Meeting'},
+  _user: {type: String, ref: 'User'}
 });
 
 module.exports = mongoose.model('AgendaItem', schema);

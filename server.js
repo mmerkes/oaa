@@ -18,8 +18,10 @@ if (process.env.NEWRELIC_LICENSE_KEY !== null && process.env.NEWRELIC_LICENSE_KE
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var mongoose = require('mongoose');
 
 var app = express();
+
 
 app.configure(function() {
   app.use(express.bodyParser());
@@ -27,13 +29,18 @@ app.configure(function() {
   app.use(app.router);
 });
 
-app.configure('development', function(){
+app.configure('development', function() {
   app.use(express.errorHandler());
+  mongoose.connect('mongodb://localhost/oaa-development');
+});
+
+app.configure('test', function() {
+  mongoose.connect('mongodb://localhost/oaa-test');
 });
 
 var users = require('./api/routes/userRoutes');
 var meetings = require('./api/routes/meetingRoutes');
-var agendaItems = require('./api/routes/agendaItems');
+var agendaItems = require('./api/routes/agendaItemRoutes');
 
 // Users routes
 app.get('/api/v1/users', users.collection);
@@ -50,7 +57,7 @@ app.put('/api/v1/meetings/:id', meetings.update);
 app.delete('/api/v1/meetings/:id', meetings.destroy);
 
 // Agenda Item Routes
-app.get('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.colleciton);
+app.get('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.collection);
 app.get('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.findById);
 app.post('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.create);
 app.put('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.update);
