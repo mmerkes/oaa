@@ -815,7 +815,7 @@ Add their badge to your project README.
 ## Complexity
 
 ### Reading
-Read chapter two of [Testable Javascript](http://shop.oreilly.com/product/0636920024699.do).
+Read chapter one and two of [Testable Javascript](http://shop.oreilly.com/product/0636920024699.do).
 
 ### Complexity-Report
 Try out this complexity metric tool:
@@ -875,8 +875,11 @@ question "What are you allowed to do?"
 ### Authentication
 We'll be using common NPM packages to abstract out the low-level details of
 authentication. For anyone that wants a more detailed view of the building blocks
-of node web app security, check out chapter seven of [The Node Cookbook]()
+of node web app security, check out chapter seven of [The Node Cookbook](http://www.packtpub.com/node-to-guide-in-the-art-of-asynchronous-server-side-javascript-cookbook/book)
+
+Help for this section came from:
+- http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local
 
 Get the packages we'll be using and add them to our package.json:
 
-`npm install bcrupt-nodejs, passport, passport-local, connect-flash --save`
+`npm install bcrupt-nodejs passport passport-local connect-flash --save`
