@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OurAgendaApp | Home</title>
+	<meta name="description" content=""
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<!-- stylesheets -->
+	<link rel="stylesheet" href="css/styles.css" type="css/text" />
+
+	<!-- javascript -->
+	<script src="browser.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+	<div class="grid">
+
+	<div class="header col_4 cf">
+
+		<div class="logo">
+		<a href=""><img src="images/OAA_logo_web.png" alt="Our Agenda App Logo"/></a>
+		</div><!-- end logo -->
+
+		<nav>
+		<ul class="navMenu">
+			<li class="navMenu_item"><a href="">About</a></li>
+			<li class="navMenu_item"><a href="#users">Users</a></li>
+			<li class="navMenu_item_button"><a class="button buttonSignup" href="">Sign up</a></li>
+		</ul>
+		</nav><!-- end nav -->
+
+	</div><!-- end header -->
+
+	</div><!-- end grid -->
+
+	<div class="mainContent">
+
+  	<!-- handlebars sub templates -->
+		{{>content}}
+
+	</div><!-- end mainContent -->
+
+</div><!-- end contianer -->
+
+<div class="footer">
+
+	<div class="footer_content">
+	<p>footer information</p>
+	</div>
+
+</div><!-- end footer -->
+
+</body>
+</html>
