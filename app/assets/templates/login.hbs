@@ -1,11 +1,11 @@
-	<div class="grid">
+<div class="grid">
 
 	<h1 class="largeHeader">Log in</h1>
-	<p class="centeredDescription col_4">Already signed up? You can <a href="">log in here.</a></p>
+	<p class="centeredDescription col_4">Need to sign up? You can <a href="/signup">sign up here.</a></p>
 
 	<div class="col_2">
 
-		<form class="loginForm">
+		<form class="loginForm" action="/login" method="post">
 
 			<label for="email">Email</label><br>
 			<input class="shortInput" id="email" type="text"><br>
@@ -20,6 +20,7 @@
 	</div><!-- end column 2 contact form -->
 
 	<div class="col_4">
-	<a href="" class="button">Create account</a></div>
+		<button type="submit" class="button">Create account</button>
+	</div>
 
-	</div><!-- end grid -->
+</div><!-- end grid -->

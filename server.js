@@ -39,8 +39,9 @@ app.configure(function() {
   app.use(express.bodyParser());
   app.use(express.cookieParser());
   app.use(express.static(path.join(__dirname, 'build')));
-  // session secret
-  app.use(express.session({ secret: 'd3099626c43cafb8356a9129f959faed066c24114e86d2cc387f07ee03843ec96c15ae3b905ed52efc245e0f7f50c032b7ed7673e914f1a8ceca3d2bf5795655' }));
+  // session secret TODO move to node-foreman's .env / process.env
+  var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEMECHANGEMECHANGEMECHANGEME';
+  app.use(express.session({ secret: session_secret }));
   app.use(passport.initialize());
   // persistent login sessions (do not want for REST API)
   app.use(passport.session());

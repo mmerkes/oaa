@@ -1,5 +1,3 @@
-
-
 	<div class="grid">
 
 	<h1 class="largeHeader">Sign up</h1>
@@ -8,7 +6,7 @@
 
 	<div class="col_2">
 
-		<form class="signupForm">
+		<form id="signupForm" action="/signup" method="post">
 
 			<label for="name">Full name</label><br>
 			<input class="shortInput" id="name" type="text"><br>
@@ -17,27 +15,23 @@
 			<input class="shortInput" id="email" type="text"><br>
 
 			<label for="password">Password</label><br>
-			<input class="shortInput" id="password" type="text"><br>
+			<input type="password" class="shortInput" id="password" type="text"><br>
 
 			<label for="confirmPassword">Confirm password</label><br>
-			<input class="shortInput" id="confirmPassword" type="text"><br>
+			<input type="password" class="shortInput" id="confirmPassword" type="text"><br>
+
+			<button type="submit" class="button createAccount">Create account</button>
 
 		</form>
 
 	</div><!-- end column 2 contact form -->
 
-	<div class="col_2">
+	  <div class="col_2">
+			<h4>You should do this!</h4>
+			<p>Because this site is awesome!</p>
 
-		<h4>Upload Profile Picture</h4>
-
-		<div class="placeholderPic"></div>
-
-		<a href="" class="secondaryButton uploadButton">Choose photo from a url</a>
-		<a href="" class="secondaryButton uploadButton">Choose photo from your computer</a>
-
-	</div><!-- end 2 column upload profile pic -->
-
-	<div class="col_4">
-	<a href="" class="button createAccount">Create account</a></div>
+			<h4>But wait there's more!</h4>
+			<p>We'll throw in a full set of node blenders!</p>
+		</div><!-- end 2 column marketing message -->
 
 	</div><!-- end grid -->
