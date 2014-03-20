@@ -9,7 +9,8 @@ casper.test.begin('users', 2, function suite(test) {
 
   casper.then(function(){
     var date = new Date();
-    var email_date = date.toString().replace(/\ |:|()/g, '');
+    var email_date = date.toString().replace(/\ |:|\(.{3}\)/g, '');
+    test.info(email_date);
     this.fill('form#signupForm', {
       'email': 'test@example.com' + email_date,
       'password': 'valid-pass-word'
