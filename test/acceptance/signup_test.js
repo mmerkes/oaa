@@ -15,11 +15,9 @@ casper.test.begin('users', 2, function suite(test) {
   });
 
   casper.then(function(){
+    test.info(this.getHTML());
+    test.assertTextExists('Profile','page body contains profile');
     test.assertHttpStatus(200);
-  });
-
-  casper.then(function(){
-    this.assertTextExists('profile','page body contains profile');
   });
 
   casper.run(function(){

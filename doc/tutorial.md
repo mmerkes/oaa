@@ -882,7 +882,7 @@ Help for this section came from:
 
 Get the packages we'll be using and add them to our package.json:
 
-`npm install bcrupt-nodejs passport passport-local connect-flash consolidate --save`
+`npm install bcrypt-nodejs passport passport-local connect-flash consolidate --save`
 
 Let's hook up these new modules with our Express setup in `server.js`.
 
