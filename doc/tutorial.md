@@ -870,7 +870,7 @@ testing.
 ## Authentication and Authorization
 
 Authentication answers the question "Who are you?". Authorization answers the
-question "What are you allowed to do?"
+question "What are you allowed to do?". The combo is frequently called Auth/Auth.
 
 ### Authentication
 We'll be using common NPM packages to abstract out the low-level details of
@@ -882,4 +882,249 @@ Help for this section came from:
 
 Get the packages we'll be using and add them to our package.json:
 
-`npm install bcrupt-nodejs passport passport-local connect-flash --save`
+`npm install bcrypt-nodejs passport passport-local connect-flash consolidate --save`
+
+Let's hook up these new modules with our Express setup in `server.js`.
+
+For authentication to work, we need cookies to work. We need to add the code below
+in the configure block for express. The
+"[Flash](https://github.com/jaredhanson/connect-flash)" is a space for a short
+message to the user, like "You are successfully logged in".
+
+```javascript
+app.use(express.cookieParser());
+```
+
+[Passport](http://passportjs.org/) is a widely used node module for Authentication.
+It offers strategies to help you implement logging in with a "local" username
+and password, or various OAuth Providers like Twitter and Facebook
+
+For Passport to work, you need a session secret. We are going to do something
+__REALLY BAD__ and keep this secret in our file (for now). Eventually we will
+put in the secret, and all other our environment variables in a `.env` file via
+__node-foreman__: [Github](https://github.com/strongloop/node-foreman) and
+[Home page](http://nodefly.github.io/node-foreman/).
+
+```javascript
+// session secret
+app.use(express.session({ secret: 'd3099626c43cafb8356a9129f959faed066c24114e86d2cc387f07ee03843ec96c15ae3b905ed52efc245e0f7f50c032b7ed7673e914f1a8ceca3d2bf5795655' }));
+app.use(passport.initialize());
+// persistent login sessions (do not want for REST API)
+app.use(passport.session());
+// use connect-flash for flash messages stored in session
+app.use(flash());
+```
+
+### Passport Configuration
+
+in `server.js`:
+```javascript
+require('./config/passport')(passport);
+```
+
+`mkdir -p config`
+
+in `config/passport.js`:
+
+```javascript
+// config/passport.js
+
+'use strict';
+
+// load all the things we need
+var LocalStrategy   = require('passport-local').Strategy;
+
+// load up the user model
+var User = require('../api/models/User');
+
+// expose this function to our app using module.exports
+module.exports = function(passport) {
+
+  // =========================================================================
+  // passport session setup ==================================================
+  // =========================================================================
+  // required for persistent login sessions
+  // passport needs ability to serialize and unserialize users out of session
+
+  // used to serialize the user for the session
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+
+  // used to deserialize the user
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
+
+  // =========================================================================
+  // LOCAL SIGNUP ============================================================
+  // =========================================================================
+  // we are using named strategies since we have one for login and one for signup
+  // by default, if there was no name, it would just be called 'local'
+
+  passport.use('local-signup', new LocalStrategy({
+    // by default, local strategy uses username and password, we will override with email
+    usernameField : 'email',
+    passwordField : 'password',
+    passReqToCallback : true // allows us to pass back the entire request to the callback
+  },
+  function(req, email, password, done) {
+
+    // asynchronous
+    // User.findOne wont fire unless data is sent back
+    process.nextTick(function() {
+
+    // find a user whose email is the same as the forms email
+    // we are checking to see if the user trying to login already exists
+      User.findOne({ 'local.email' :  email }, function(err, user) {
+        // if there are any errors, return the error
+        if (err)
+          return done(err);
+
+          // check to see if theres already a user with that email
+        if (user) {
+          return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+        } else {
+
+        // if there is no user with that email
+        // create the user
+          var newUser = new User();
+
+          // set the user's local credentials
+          newUser.local.email    = email;
+          newUser.local.password = newUser.generateHash(password);
+
+          // save the user
+          newUser.save(function(err) {
+            if (err)
+              throw err;
+            return done(null, newUser);
+          });
+        }
+
+      });
+
+    });
+
+  }));
+
+};
+
+```
+
+Modify your user model:
+
+`api/models/User.js`
+
+```javascript
+'use strict';
+//jshint unused:false
+
+var mongoose = require('mongoose');
+var bcrypt   = require('bcrypt-nodejs');
+mongoose.connect('mongodb://localhost/oaa');
+
+var schema = new mongoose.Schema({
+  first_name: String,
+  last_name: String,
+  email: String,
+  local: {
+    email: String,
+    password: String
+  }
+});
+
+// generate a secure hash
+schema.methods.generateHash = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+schema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.local.password);
+};
+
+module.exports = mongoose.model('User', schema);
+```
+
+### Server Side Templating
+
+I'm installing [Consolidate.JS](https://github.com/visionmedia/consolidate.js/)
+because it will be easier to keep the login forms templated on the server side to
+start out with.
+
+Let's hook up ConsolidateJS to serve Handlebars `.hbs` templates.
+
+`server.js`
+
+```javascript
+// set up consolidate and handlebars templates
+app.engine('hbs', cons.handlebars);
+app.set('view engine', 'hbs');
+app.set('views', __dirname + '/app/assets/templates');
+...
+require('./app/routes.js')(app, passport);
+```
+
+`app/routes.js`
+```javascript
+// app/routes.js
+//jshint unused:false
+'use strict';
+
+module.exports = function(app, passport) {
+
+  // LOGIN
+  // show the login form
+  app.get('/login', function(req, res) {
+
+    // render the page and pass in any flash data if it exists
+    res.render('login.hbs', { message: req.flash('loginMessage') });
+  });
+
+  // process the login form
+  // app.post('/login', do all our passport stuff here);
+
+  // SIGNUP
+  // show the signup form
+  app.get('/signup', function(req, res) {
+
+    // render the page and pass in any flash data if it exists
+    res.render('signup.hbs', { message: req.flash('signupMessage') });
+  });
+
+  // process the signup form
+  // app.post('/signup', do all our passport stuff here);
+
+  // PROFILE SECTION
+  // we will want this protected so you have to be logged in to visit
+  // we will use route middleware to verify this (the isLoggedIn function)
+  app.get('/profile', isLoggedIn, function(req, res) {
+    res.render('profile.ejs', {
+
+      // get the user out of session and pass to template
+      user : req.user
+    });
+  });
+
+  // LOGOUT
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+};
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated())
+    return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect('/');
+}
+
+```
