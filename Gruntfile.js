@@ -18,6 +18,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-env');
 
   grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-concurrent');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -238,10 +239,13 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    concurrent: {
+      buildDev: ['sass:dev', 'browserify:dev', 'jshint:all']
     }
   });
 
-  grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
+  grunt.registerTask('build:dev', ['clean:dev', 'concurrent:buildDev', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test', ['env:test', 'jshint', 'mochacov:unit','mochacov:coverage' ]);
   grunt.registerTask('travis', ['jshint', 'mochacov:unit', 'mochacov:coverage', 'mochacov:coveralls']);
