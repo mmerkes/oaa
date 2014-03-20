@@ -23,6 +23,7 @@ var path     = require('path');
 var port     = process.env.PORT || 3000;
 var passport = require('passport');
 var flash    = require('connect-flash');
+var mongoose = require('mongoose');
 require('./config/passport')(passport);
 
 
