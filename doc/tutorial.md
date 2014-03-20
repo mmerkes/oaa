@@ -688,16 +688,443 @@ render: function() {
 }
 ```
 
-## Continuous Integraion
-DRAFT
+## Continuous Integration
+
+Now that your tests are running, it's time to automate them every time you push
+to GitHub. When your tests pass on your feature branch, GitHub +
+[TravisCI](http://travis-ci.org) can give you the go ahead and merge them into
+the master branch. This is how open source [continuous integration](http://en.wikipedia.org/wiki/Continuous_integration)
+works. [TravisCI](http://travis-ci.org) is free for open source projects, and as
+its name signifies, is a
+[continuous integration](http://blog.teamtreehouse.com/use-continuous-integration-continuous-deployment)
+server.
+
+An additional bonus is that setting up Travis, although at times difficult, is a
+great first step to getting a real production environment spec'd out. Knowing all
+the dependencies needed to set up Travis automatically will help you when you're
+building your deployment server automatically, too.
+
+Travis uses a '.travis.yml' file for configuration. Check out the
+[online docs](http://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
+for getting started with JavaScript/Node projects.
 
 edit `.travis.yml`
 
 ```yaml
 language: node_js
 node_js:
-  - "0.10"
-before_install: npm install -g grunt-cli
-install: npm install
-before_script: grunt build:dev
+- '0.10'
+services: mongodb
+before_install:
+- npm install -g grunt-cli
+- npm install -g bower
+install:
+- npm install
+- bower install
+before_script:
+- grunt mongoimport
+- grunt build:dev
+env:
+  global:
+    secure: SET_YOUR_OWN_COVERALLS_KEY_HERE_WITH_TRAVIS_GEM
+```
+
+You also need to add a section to your `package.json` to let travis run the
+`npm test` command:
+
+```json
+"scripts": {
+  "test": "mkdir -p build && grunt travis --trace --verbose"
+},
+```
+
+We need to tell Travis that we are going to use their shared mongodb server. We
+need Travis to install grunt-cli and bower before even installing the dependencies
+from our project. We also need to tell Travis to load our database seeds, and
+then build the app. You can also set secure environment variables, which we will
+get to in a while later when discussing code coverage.
+
+Since you have a working ruby installed, it's easy to get a helpful tool for
+Travis installed. `gem install travis`
+You'll want to check out the brief help: `help travis` . The travis gem is also
+how you will end up encrypting any environment keys needed on TravisCI.
+
+## Code Coverage
+
+Code coverage is a measurement of how much code your tests have actually executed.
+The code coverage tools I have used are [Blanket.js](http://blanketjs.org/) and
+[Coveralls.io](http://coveralls.io/)
+
+Go ahead and sign up for [Coveralls.io](http://coveralls.io/) with your GitHub
+account.
+
+BlanketJS is available as a [stand-alone tool](http://blanketjs.org) but it's easy
+to integrate it with our Grunt build with a couple of npm packages:
+
+`npm install grunt-mocha-cov mocha-term-cov-reporter --save-dev`
+
+Put a new section into our `Gruntfile.js` for the
+[mochacov](https://github.com/mmoulton/grunt-mocha-cov)
+and [mocha-term-cov-reporter](https://github.com/jakobmattsson/mocha-term-cov-reporter)
+combo. Don't forget to check out the README's in the links above.
+
+```javascript
+mochacov: {
+  coverage: {
+    options: {
+      reporter: 'mocha-term-cov-reporter',
+      coverage: true
+    }
+  },
+  coveralls: {
+    options: {
+      coveralls: {
+        serviceName: 'travis-ci'
+      }
+    }
+  },
+  unit: {
+    options: {
+      reporter: 'spec',
+      require: ['chai']
+    }
+  },
+  html: {
+    options: {
+      reporter: 'html-cov',
+      require: ['chai']
+    }
+  },
+  options: {
+    files: 'test/*.js',
+    ui: 'bdd',
+    colors: true
+  }
+},
+```
+
+## Gemnasium
+
+Gemnasium monitors your project dependencies and alerts you about updates and
+security vulnerabilities.
+
+Check out [Our Gemnasium report](https://gemnasium.com/codefellows/oaa), and get
+it running for your project according to their instructions.
+Add their badge to your project README.
+
+## Complexity
+
+### Reading
+Read chapter one and two of [Testable Javascript](http://shop.oreilly.com/product/0636920024699.do).
+
+### Complexity-Report
+Try out this complexity metric tool:
+[https://github.com/philbooth/complexity-report](https://github.com/philbooth/complexity-report)
+
+- `npm install -g complexity-report`
+- `cr --help`
+- `cr app/assets/js api`
+
+TODO: Integrate with Grunt: [https://github.com/vigetlabs/grunt-complexity](https://github.com/vigetlabs/grunt-complexity)
+
+### JS-Complexity-Viz
+Try out this other complexity metric tool:
+
+[https://github.com/bahmutov/js-complexity-viz](https://github.com/bahmutov/js-complexity-viz)
+
+- `npm install -g jsc`
+- `jsc api/**/*.js app/assets/js/**/*.js`
+
+### Plato
+Another one with a great HTML report format:
+
+- `npm install -g plato`
+- `plato -r -l .jshintrc -d doc/complexity api app/assets/js`
+- `open doc/complexity/index.html`
+
+TODO: integrate with Grunt?
+
+TIP: you may want to add the complexity and coverage reports to your .gitignore.
+Because they are always changing, they will add a lot of noise to your commits.
+
+### Code Climate
+
+[Code Climate](https://codeclimate.com/) offers code quality (complexity) metrics
+for Ruby and JavaScript projects.
+
+Please, use judgement with this tool. Don't go for all A's
+[according to the founder of Code Climate](https://gist.github.com/brynary/21369b5892525e1bd102).
+
+## Front-End testing
+
+Seattleite [Ryan Roemer](https://twitter.com/ryan_roemer) literally
+[wrote the book](http://backbone-testing.com/) on this. It's a big topic and I
+highly recommend the book. A quick summary of the book can be found in his
+[Learn Front-End Testing Slides](http://formidablelabs.github.io/learn-frontend-testing/#/title)
+Note that slides go up and down in addition to left/right. BTW, this is a
+[Reveal.js](http://lab.hakim.se/reveal-js/) presentation.
+
+To really improve our code coverage, we are going to have to improve our front-end
+testing.
+
+## Authentication and Authorization
+
+Authentication answers the question "Who are you?". Authorization answers the
+question "What are you allowed to do?". The combo is frequently called Auth/Auth.
+
+### Authentication
+We'll be using common NPM packages to abstract out the low-level details of
+authentication. For anyone that wants a more detailed view of the building blocks
+of node web app security, check out chapter seven of [The Node Cookbook](http://www.packtpub.com/node-to-guide-in-the-art-of-asynchronous-server-side-javascript-cookbook/book)
+
+Help for this section came from:
+- http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local
+
+Get the packages we'll be using and add them to our package.json:
+
+`npm install bcrypt-nodejs passport passport-local connect-flash consolidate --save`
+
+Let's hook up these new modules with our Express setup in `server.js`.
+
+For authentication to work, we need cookies to work. We need to add the code below
+in the configure block for express. The
+"[Flash](https://github.com/jaredhanson/connect-flash)" is a space for a short
+message to the user, like "You are successfully logged in".
+
+```javascript
+app.use(express.cookieParser());
+```
+
+[Passport](http://passportjs.org/) is a widely used node module for Authentication.
+It offers strategies to help you implement logging in with a "local" username
+and password, or various OAuth Providers like Twitter and Facebook
+
+For Passport to work, you need a session secret. We are going to do something
+__REALLY BAD__ and keep this secret in our file (for now). Eventually we will
+put in the secret, and all other our environment variables in a `.env` file via
+__node-foreman__: [Github](https://github.com/strongloop/node-foreman) and
+[Home page](http://nodefly.github.io/node-foreman/).
+
+```javascript
+// session secret
+app.use(express.session({ secret: 'd3099626c43cafb8356a9129f959faed066c24114e86d2cc387f07ee03843ec96c15ae3b905ed52efc245e0f7f50c032b7ed7673e914f1a8ceca3d2bf5795655' }));
+app.use(passport.initialize());
+// persistent login sessions (do not want for REST API)
+app.use(passport.session());
+// use connect-flash for flash messages stored in session
+app.use(flash());
+```
+
+### Passport Configuration
+
+in `server.js`:
+```javascript
+require('./config/passport')(passport);
+```
+
+`mkdir -p config`
+
+in `config/passport.js`:
+
+```javascript
+// config/passport.js
+
+'use strict';
+
+// load all the things we need
+var LocalStrategy   = require('passport-local').Strategy;
+
+// load up the user model
+var User = require('../api/models/User');
+
+// expose this function to our app using module.exports
+module.exports = function(passport) {
+
+  // =========================================================================
+  // passport session setup ==================================================
+  // =========================================================================
+  // required for persistent login sessions
+  // passport needs ability to serialize and unserialize users out of session
+
+  // used to serialize the user for the session
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+
+  // used to deserialize the user
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
+
+  // =========================================================================
+  // LOCAL SIGNUP ============================================================
+  // =========================================================================
+  // we are using named strategies since we have one for login and one for signup
+  // by default, if there was no name, it would just be called 'local'
+
+  passport.use('local-signup', new LocalStrategy({
+    // by default, local strategy uses username and password, we will override with email
+    usernameField : 'email',
+    passwordField : 'password',
+    passReqToCallback : true // allows us to pass back the entire request to the callback
+  },
+  function(req, email, password, done) {
+
+    // asynchronous
+    // User.findOne wont fire unless data is sent back
+    process.nextTick(function() {
+
+    // find a user whose email is the same as the forms email
+    // we are checking to see if the user trying to login already exists
+      User.findOne({ 'local.email' :  email }, function(err, user) {
+        // if there are any errors, return the error
+        if (err)
+          return done(err);
+
+          // check to see if theres already a user with that email
+        if (user) {
+          return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+        } else {
+
+        // if there is no user with that email
+        // create the user
+          var newUser = new User();
+
+          // set the user's local credentials
+          newUser.local.email    = email;
+          newUser.local.password = newUser.generateHash(password);
+
+          // save the user
+          newUser.save(function(err) {
+            if (err)
+              throw err;
+            return done(null, newUser);
+          });
+        }
+
+      });
+
+    });
+
+  }));
+
+};
+
+```
+
+Modify your user model:
+
+`api/models/User.js`
+
+```javascript
+'use strict';
+//jshint unused:false
+
+var mongoose = require('mongoose');
+var bcrypt   = require('bcrypt-nodejs');
+mongoose.connect('mongodb://localhost/oaa');
+
+var schema = new mongoose.Schema({
+  first_name: String,
+  last_name: String,
+  email: String,
+  local: {
+    email: String,
+    password: String
+  }
+});
+
+// generate a secure hash
+schema.methods.generateHash = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+schema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.local.password);
+};
+
+module.exports = mongoose.model('User', schema);
+```
+
+### Server Side Templating
+
+I'm installing [Consolidate.JS](https://github.com/visionmedia/consolidate.js/)
+because it will be easier to keep the login forms templated on the server side to
+start out with.
+
+Let's hook up ConsolidateJS to serve Handlebars `.hbs` templates.
+
+`server.js`
+
+```javascript
+// set up consolidate and handlebars templates
+app.engine('hbs', cons.handlebars);
+app.set('view engine', 'hbs');
+app.set('views', __dirname + '/app/assets/templates');
+...
+require('./app/routes.js')(app, passport);
+```
+
+`app/routes.js`
+```javascript
+// app/routes.js
+//jshint unused:false
+'use strict';
+
+module.exports = function(app, passport) {
+
+  // LOGIN
+  // show the login form
+  app.get('/login', function(req, res) {
+
+    // render the page and pass in any flash data if it exists
+    res.render('login.hbs', { message: req.flash('loginMessage') });
+  });
+
+  // process the login form
+  // app.post('/login', do all our passport stuff here);
+
+  // SIGNUP
+  // show the signup form
+  app.get('/signup', function(req, res) {
+
+    // render the page and pass in any flash data if it exists
+    res.render('signup.hbs', { message: req.flash('signupMessage') });
+  });
+
+  // process the signup form
+  // app.post('/signup', do all our passport stuff here);
+
+  // PROFILE SECTION
+  // we will want this protected so you have to be logged in to visit
+  // we will use route middleware to verify this (the isLoggedIn function)
+  app.get('/profile', isLoggedIn, function(req, res) {
+    res.render('profile.ejs', {
+
+      // get the user out of session and pass to template
+      user : req.user
+    });
+  });
+
+  // LOGOUT
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+};
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated())
+    return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect('/');
+}
+
 ```

@@ -15,19 +15,43 @@ if (process.env.NEWRELIC_LICENSE_KEY !== null && process.env.NEWRELIC_LICENSE_KE
   }
 }
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var mongoose = require('mongoose');
+var express  = require('express');
+var app      = express();
+var cons     = require('consolidate');
+var http     = require('http');
+var path     = require('path');
+var port     = process.env.PORT || 3000;
+var passport = require('passport');
+var flash    = require('connect-flash');
+require('./config/passport')(passport);
 
-var app = express();
+
+// set up consolidate and handlebars templates
+app.engine('hbs', cons.handlebars);
+app.set('view engine', 'hbs');
+app.set('views', __dirname + '/app/assets/templates');
+
+app.configure('development', function() {
+  app.use(express.logger('dev'));
+  app.use(express.errorHandler());
+});
 
 
 app.configure(function() {
   app.use(express.bodyParser());
+  app.use(express.cookieParser());
   app.use(express.static(path.join(__dirname, 'build')));
+  // session secret TODO move to node-foreman's .env / process.env
+  var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEMECHANGEMECHANGEMECHANGEME';
+  app.use(express.session({ secret: session_secret }));
+  app.use(passport.initialize());
+  // persistent login sessions (do not want for REST API)
+  app.use(passport.session());
+  // use connect-flash for flash messages stored in session
+  app.use(flash());
   app.use(app.router);
 });
+
 
 app.configure('development', function() {
   app.use(express.errorHandler());
@@ -37,6 +61,9 @@ app.configure('development', function() {
 app.configure('test', function() {
   mongoose.connect('mongodb://localhost/oaa-test');
 });
+
+require('./app/routes.js')(app, passport);
+
 
 var users = require('./api/routes/userRoutes');
 var meetings = require('./api/routes/meetingRoutes');

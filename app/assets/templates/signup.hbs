@@ -1,0 +1,37 @@
+	<div class="grid">
+
+	<h1 class="largeHeader">Sign up</h1>
+	<p class="centeredDescription col_4">Already signed up? You can <a href="/login">log in here.</a></p>
+	<p class="flash">{{message}}</p>
+
+	<div class="col_2">
+
+		<form id="signupForm" action="/signup" method="post">
+
+			<label for="name">Full name</label><br>
+			<input class="shortInput" name="name" id="name" type="text"><br>
+
+			<label for="email">Email</label><br>
+			<input class="shortInput" name="email" id="email" type="text"><br>
+
+			<label for="password">Password</label><br>
+			<input type="password" name="password" class="shortInput" id="password" type="text"><br>
+
+			<label for="confirmPassword">Confirm password</label><br>
+			<input type="password" name="confirmPassword" class="shortInput" id="confirmPassword" type="text"><br>
+
+			<button type="submit" class="button createAccount">Create account</button>
+
+		</form>
+
+	</div><!-- end column 2 contact form -->
+
+	  <div class="col_2">
+			<h4>You should do this!</h4>
+			<p>Because this site is awesome!</p>
+
+			<h4>But wait there's more!</h4>
+			<p>We'll throw in a full set of node blenders!</p>
+		</div><!-- end 2 column marketing message -->
+
+	</div><!-- end grid -->

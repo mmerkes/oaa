@@ -17,6 +17,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-env');
 
+  grunt.loadNpmTasks('grunt-mocha-cov');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -131,13 +132,47 @@ module.exports = function(grunt) {
         }
       }
     },
+
+    mochacov: {
+      coverage: {
+        options: {
+          reporter: 'mocha-term-cov-reporter',
+          coverage: true
+        }
+      },
+      coveralls: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci'
+          }
+        }
+      },
+      unit: {
+        options: {
+          reporter: 'spec',
+          require: ['chai']
+        }
+      },
+      html: {
+        options: {
+          reporter: 'html-cov',
+          require: ['chai']
+        }
+      },
+      options: {
+        files: 'test/*.js',
+        ui: 'bdd',
+        colors: true
+      }
+    },
+
     watch: {
       all: {
         files:['server.js', './**/*.js' ],
         tasks:['jshint']
       },
       express: {
-        files:  [ 'server.js','api/**/*','app/assets/**/*' ],
+        files:  [ 'server.js','api/**/*','app/assets/**/*','app/*.js' ],
         tasks:  [ 'clean', 'copy', 'sass:dev', 'browserify:dev', 'express:dev' ],
         options: {
           // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions.
@@ -208,9 +243,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
-  grunt.registerTask('test', ['env:test', 'jshint', 'simplemocha:test']);
-  grunt.registerTask('server', ['env:dev', 'build:dev', 'express:dev', 'watch:express','notify' ]);
+  grunt.registerTask('test', ['env:test', 'jshint', 'mochacov:unit','mochacov:coverage' ]);
+  grunt.registerTask('travis', ['jshint', 'mochacov:unit', 'mochacov:coverage', 'mochacov:coveralls']);
+  grunt.registerTask('server', [ 'env:dev', 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
-
 };

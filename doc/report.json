@@ -1,0 +1,47 @@
+{
+  "/users/ivan/dev/oaa/api/models/user.js": {
+    "loc": 8,
+    "cyclomatic": 1,
+    "halstead": 5
+  },
+  "/users/ivan/dev/oaa/app/assets/js/browser.js": {
+    "loc": 9,
+    "cyclomatic": 1,
+    "halstead": 5
+  },
+  "/users/ivan/dev/oaa/app/assets/js/models/user.js": {
+    "loc": 9,
+    "cyclomatic": 1,
+    "halstead": 4
+  },
+  "/users/ivan/dev/oaa/app/assets/js/models/usercollection.js": {
+    "loc": 6,
+    "cyclomatic": 1,
+    "halstead": 4
+  },
+  "/users/ivan/dev/oaa/app/assets/js/routers/userrouter.js": {
+    "loc": 21,
+    "cyclomatic": 1,
+    "halstead": 7
+  },
+  "/users/ivan/dev/oaa/app/assets/js/views/usercollectionview.js": {
+    "loc": 17,
+    "cyclomatic": 1,
+    "halstead": 7
+  },
+  "/users/ivan/dev/oaa/app/assets/js/views/userview.js": {
+    "loc": 14,
+    "cyclomatic": 1,
+    "halstead": 6
+  },
+  "/users/ivan/dev/oaa/api/routes/userroutes.js": {
+    "loc": 46,
+    "cyclomatic": 5,
+    "halstead": 20
+  },
+  "/users/ivan/dev/oaa/app/assets/js/tabs.js": {
+    "loc": 45,
+    "cyclomatic": 8,
+    "halstead": 23
+  }
+}
