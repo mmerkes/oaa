@@ -12,6 +12,7 @@ var schema = new mongoose.Schema({
       author_id: String,
     }
   },
+  _user: {type: String, ref: 'User'}
 });
 
 module.exports = mongoose.model('Meeting', schema);

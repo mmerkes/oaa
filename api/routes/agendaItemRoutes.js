@@ -1,9 +1,20 @@
 'use strict';
 var AgendaItem = require('../models/AgendaItem');
 
+exports.collectionByMeeting = function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  AgendaItem.find({'_meeting': req.params.meeting_id}, function(err, agendaItems) {
+    if(err) {
+      res.send(500, {'error': err});
+    } else {
+      res.send(agendaItems);
+    }
+  });
+};
+
 exports.collection = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  AgendaItem.find({'_meeting': req.params.meeting_id}, function(err, agendaItems){
+  AgendaItem.find({}, function(err, agendaItems) {
     if(err) {
       res.send(500, {'error': err});
     } else {
@@ -24,13 +35,27 @@ exports.findById = function(req, res) {
   });
 };
 
-exports.create = function(req, res) {
+exports.createByMeeting = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   req.body._meeting = req.params.meeting_id;
   var agendaItem = new AgendaItem(req.body);
 
   agendaItem.save(function(err, responseMeeting){
+    if(err) {
+      res.send(500, {'error': err});
+    } else {
+      res.send(responseMeeting);
+    }
+  });
+};
+
+exports.create = function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+
+  var agendaItem = new AgendaItem(req.body);
+
+  agendaItem.save(function(err, responseMeeting) {
     if(err) {
       res.send(500, {'error': err});
     } else {

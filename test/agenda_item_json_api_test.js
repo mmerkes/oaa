@@ -54,7 +54,7 @@ describe('AgendaItem JSON api', function() {
   });
 
   it('can get a single agenda item for a meeting', function(done) {
-    superagent.get('http://localhost:3000/api/v1/meetings/' + meeting._id + '/agenda_items/' + id)
+    superagent.get('http://localhost:3000/api/v1/agenda_items/' + id)
       .end(function(e , res) {
         expect(e).to.eql(null);
         expect(res.body.body).to.eql('There are important things to discuss');
@@ -64,7 +64,7 @@ describe('AgendaItem JSON api', function() {
   });
 
   it('can update an angenda item for a meeting ', function(done) {
-    superagent.put('http://localhost:3000/api/v1/meetings/' + meeting._id + '/agenda_items/' + id)
+    superagent.put('http://localhost:3000/api/v1/agenda_items/' + id)
       .send({body: 'Some new name'})
       .end(function(e, res) {
         expect(e).to.eql(null);
@@ -75,7 +75,7 @@ describe('AgendaItem JSON api', function() {
   });
 
   it('can delete an agenda item for a meeting', function(done) {
-    superagent.del('http://localhost:3000/api/v1/meetings/' + meeting._id + '/agenda_items/' + id)
+    superagent.del('http://localhost:3000/api/v1/agenda_items/' + id)
       .end(function(e, res) {
         expect(e).to.eql(null);
         expect(res.body.msg).to.eql('success');

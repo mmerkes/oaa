@@ -57,11 +57,13 @@ app.put('/api/v1/meetings/:id', meetings.update);
 app.delete('/api/v1/meetings/:id', meetings.destroy);
 
 // Agenda Item Routes
-app.get('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.collection);
-app.get('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.findById);
-app.post('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.create);
-app.put('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.update);
-app.delete('/api/v1/meetings/:meeting_id/agenda_items/:id', agendaItems.destroy);
+app.get('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.collectionByMeeting);
+app.get('/api/v1/agenda_items', agendaItems.collection);
+app.get('/api/v1/agenda_items/:id', agendaItems.findById);
+app.post('/api/v1/meetings/:meeting_id/agenda_items', agendaItems.createByMeeting);
+app.post('/api/v1/agenda_items', agendaItems.create);
+app.put('/api/v1/agenda_items/:id', agendaItems.update);
+app.delete('/api/v1/agenda_items/:id', agendaItems.destroy);
 
 // uncomment this if you want to use pushState:true in UserRouter.js start
 // app.get('/users*', function(req, res) {
