@@ -16,6 +16,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mongoimport');
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-concurrent');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -221,7 +222,21 @@ module.exports = function(grunt) {
           }
         ]
       }
-    }
+    },
+    concurrent: {
+      dev: {
+        tasks: ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev'],
+        options: {
+          limit: 10
+        }
+      },
+      prod: {
+        tasks: ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod'],
+        options: {
+          limit: 10
+        }
+      }
+    },
   });
 
   grunt.registerTask('build:dev',  ['clean:dev', 'sass:dev', 'browserify:dev', 'jshint:all', 'copy:dev']);
@@ -231,5 +246,6 @@ module.exports = function(grunt) {
   grunt.registerTask('server', [ 'build:dev', 'express:dev', 'watch:express','notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
+  grunt.registerTask('dev-conc',  ['concurrent:dev']);
 
 };
