@@ -8,16 +8,18 @@ casper.test.begin('users', 2, function suite(test) {
   });
 
   casper.then(function(){
+    var date = new Date();
+    var email_date = date.toString().replace(/\ |:|()/g, '');
     this.fill('form#signupForm', {
-      'email': 'test@example.com',
+      'email': 'test@example.com' + email_date,
       'password': 'valid-pass-word'
     }, true);
   });
 
   casper.then(function(){
-    test.info(this.getHTML());
+    // for debugging
+    // test.info(this.getHTML('.mainContent'));
     test.assertTextExists('Profile','page body contains profile');
-    test.assertHttpStatus(200);
   });
 
   casper.run(function(){
